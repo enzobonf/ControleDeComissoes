@@ -13,7 +13,7 @@ module.exports = {
         });
 
         const mailOptions = {
-            from: 'no-reply@diegopinho.com',
+            from: 'Enzo',
             to,
             subject,
             html: text + '<p>' + html
