@@ -49,7 +49,7 @@ function sendEmail(){
                 Espero que me pague rápido kkkkkkk <p>        
                 (Email automático enviado no dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm")})`;
             
-            emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'enzobonfx@gmail.com').then(result=>{
+            emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'leandra@golfershoes.com.br').then(result=>{
                 resolve('Email enviado com sucesso!');
             }).catch(err=>{
                 reject(err);
