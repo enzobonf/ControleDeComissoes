@@ -29,8 +29,8 @@ function sendEmail(){
                 tr = tr + (`
                     <tr>
                         <td align='center' valign='middle'>${result.ID_PEDIDO}</td>
-                        <td align='center' valign='middle'>R$ ${result.VALOR_PEDIDO}</td>
-                        <td align='center' valign='middle'>R$ ${result.VALOR_COMISSAO}</td>
+                        <td align='center' valign='middle'>${result.VALOR_PEDIDO}</td>
+                        <td align='center' valign='middle'>${result.VALOR_COMISSAO}</td>
                         <td align='center' valign='middle'>${moment.parseZone(result.DATA_RECEBIMENTO).format("DD/MM/YYYY")}</td>
                         <td align='center' valign='middle'>Atrasada</td>
                     </tr>
@@ -42,15 +42,14 @@ function sendEmail(){
                     </table>
                 </body>
             </html>`;
-    
+
             emailText = `Oi mãe, <br>
                 Existem ${results.length} comissões atrasadas. <br>
-                Somando um valor total de R$ ${somaComissoes}, <br>
+                Somando um valor total de R$ ${somaComissoes.toFixed(2)}, <br>
                 Espero que me pague rápido kkkkkkk <p>        
-                (Email automático enviado no dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment.parseZone().format("hh:mm")})`;
+                (Email automático enviado no dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm")})`;
             
-            emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'leandra@golfershoes.com.br').then(result=>{
-                console.log('Email enviado com sucesso');
+            emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'enzobonfx@gmail.com').then(result=>{
                 resolve('Email enviado com sucesso!');
             }).catch(err=>{
                 reject(err);

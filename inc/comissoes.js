@@ -10,7 +10,8 @@ module.exports = {
             let dateNow = moment.parseZone().format("YYYY-MM-DD");
 
             conn.query(`
-                SELECT * FROM Comissoes WHERE DATA_RECEBIMENTO < '${dateNow}' and SITUACAO = 0`,
+                SELECT * FROM Comissoes WHERE DATA_RECEBIMENTO < '${dateNow}' and SITUACAO = 0
+                ORDER BY ID_PEDIDO DESC`,
             (err, results)=>{
             
                 if(err){

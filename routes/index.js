@@ -9,8 +9,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/send', function(req, res, next) {
-  sendTask.sendDirectly().then(result=>{
+  sendTask.sendDirectly().then(result=>{    
     res.send(result);
+    console.log(result);
   });
 });
 
