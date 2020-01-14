@@ -9,14 +9,26 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/send', function(req, res, next) {
-  sendTask.sendDirectly().then(result=>{    
-    res.send(result.message + result.table + `<h2 style="font-family:Calibri">Total: R$ ${result.somaComissoes}<h2>`);
+  sendTask.sendDirectly().then(result=>{
+
+      let stringResponse = result.message;
+      if(result.table) stringResponse = stringResponse + result.table;
+      if(result.somaComissoes) stringResponse = stringResponse + `<h2 style="font-family:Calibri">Total: R$ ${result.somaComissoes}<h2>`;
+      
+      res.send(stringResponse);
+
   });
 });
 
 router.get('/list', function(req, res, next) {
-  sendTask.listAll(req).then(result=>{    
-    res.send(result.message + result.table + `<h2 style="font-family:Calibri">Total: R$ ${result.somaComissoes}<h2>`);
+  sendTask.listAll(req).then(result=>{ 
+
+      let stringResponse = result.message;
+      if(result.table) stringResponse = stringResponse + result.table;
+      if(result.somaComissoes) stringResponse = stringResponse + `<h2 style="font-family:Calibri">Total: R$ ${result.somaComissoes}<h2>`;
+      
+      res.send(stringResponse);
+
   });
 });
 
