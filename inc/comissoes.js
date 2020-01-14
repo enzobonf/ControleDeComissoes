@@ -39,7 +39,7 @@ module.exports = {
             }
 
             var query = conn.query(`
-                SELECT * FROM comissoes 
+                SELECT * FROM Comissoes 
                 ${(late) ? 'WHERE DATA_RECEBIMENTO < ? and SITUACAO = 0' : ''}
                 ${(year !== false) ? 'WHERE YEAR(DATA_RECEBIMENTO) = ?' : ''}
                 ${(month !== false) ? 'AND MONTH(DATA_RECEBIMENTO) = ? ' : ''}
