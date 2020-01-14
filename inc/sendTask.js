@@ -105,9 +105,7 @@ function sendEmail(){
             }
             
         }).catch(err=>{
-            reject({
-                message: err
-            });
+            reject(err);
         });
 
     });
@@ -139,7 +137,7 @@ module.exports = {
         
         return new Promise((resolve, reject)=>{
 
-            comissoes.select(false, req.query.limit).then(results=>{
+            comissoes.select(false, req).then(results=>{
     
                 if(results.length > 0){
     
@@ -160,9 +158,7 @@ module.exports = {
                 }
     
             }).catch(err=>{
-                reject({
-                    message: err
-                });
+                reject(err);
             });
     
         });

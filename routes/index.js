@@ -17,6 +17,8 @@ router.get('/send', function(req, res, next) {
       
       res.send(stringResponse);
 
+  }).catch(err=>{
+      res.send(err);
   });
 });
 
@@ -29,6 +31,8 @@ router.get('/list', function(req, res, next) {
       
       res.send(stringResponse);
 
+  }).catch(err=>{
+      res.send(err);
   });
 });
 
