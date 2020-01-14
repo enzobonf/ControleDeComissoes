@@ -45,12 +45,16 @@ module.exports = {
                 ${(month !== false) ? 'AND MONTH(DATA_RECEBIMENTO) = ? ' : ''}
                 ORDER BY DATA_RECEBIMENTO DESC
                 LIMIT ${limit}`, params,(err, results)=>{
+
                     if(err){
                         reject(err);
                     }
                     else{
                         resolve(results);
                     }
+
+                    conn.end();
+                    
                 });
 
 
