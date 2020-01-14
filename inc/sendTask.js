@@ -85,7 +85,7 @@ function sendEmail(){
                     Espero que me pague rápido kkkkkkk <p>        
                     (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm")})`;
                 
-                emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'leandra@golfershoes.com.br').then(result=>{
+                emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'enzobonfx@gmail.com').then(result=>{
                     resolve({
                         message: 'Email enviado com sucesso!',
                         table: tr,
@@ -129,6 +129,8 @@ module.exports = {
         return new Promise((resolve, reject)=>{
             sendEmail().then(results=>{
                 resolve(results);
+            }).catch(err=>{
+                reject(err);
             });
         });
     },
@@ -145,7 +147,7 @@ module.exports = {
                     let somaComissoes = arrayTr.somaComissoes;
                     let tr = arrayTr.tr;             
                     resolve({
-                        message: `Últimas ${results.length} comissões: `,
+                        message: `<h3 style="font-family:Calibri">Últimas ${results.length} comissões:</h3>`,
                         table: tr,
                         somaComissoes
                     });

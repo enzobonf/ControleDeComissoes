@@ -37,7 +37,7 @@ module.exports = {
 
                 }
             }
-
+            
             var query = conn.query(`
                 SELECT * FROM Comissoes 
                 ${(late) ? 'WHERE DATA_RECEBIMENTO < ? and SITUACAO = 0' : ''}
@@ -53,7 +53,6 @@ module.exports = {
                         resolve(results);
                     }
 
-                    conn.end();
                     
                 });
 
