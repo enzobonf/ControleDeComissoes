@@ -99,7 +99,7 @@ function sendEmail(){
 
             }
             else{
-                reject({
+                resolve({
                     message:'Não há nenhuma comissão atrasada!'
                 });
             }
