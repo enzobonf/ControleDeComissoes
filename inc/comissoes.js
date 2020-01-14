@@ -51,7 +51,6 @@ module.exports = {
                     else{
                         resolve(results);
                     }
-
                 });
 
 
