@@ -3,21 +3,23 @@ var moment = require('moment');
 
 module.exports = {
 
-    selectLates(){
+    select(late, limit = 20){
 
         return new Promise((resolve, reject)=>{
 
             let dateNow = moment.parseZone().format("YYYY-MM-DD");
 
             conn.query(`
-                SELECT * FROM Comissoes WHERE DATA_RECEBIMENTO < '${dateNow}' and SITUACAO = 0
-                ORDER BY ID_PEDIDO DESC`,
-            (err, results)=>{
+                SELECT * FROM Comissoes ${(late) ? 'WHERE DATA_RECEBIMENTO < ? and SITUACAO = 0' : ''}
+                ORDER BY DATA_RECEBIMENTO DESC
+                LIMIT ${limit}`, [
+                    dateNow,
+                ],(err, results)=>{
             
                 if(err){
                     reject(err);
                 }
-                
+                7
                 resolve(results);
 
             });

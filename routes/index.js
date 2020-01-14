@@ -10,8 +10,13 @@ router.get('/', function(req, res, next) {
 
 router.get('/send', function(req, res, next) {
   sendTask.sendDirectly().then(result=>{    
-    res.send(result);
-    console.log(result);
+    res.send(result.message + result.table + `<h2 style="font-family:Calibri">Total: R$ ${result.somaComissoes}<h2>`);
+  });
+});
+
+router.get('/list', function(req, res, next) {
+  sendTask.listAll(req).then(result=>{    
+    res.send(result.message + result.table + `<h2 style="font-family:Calibri">Total: R$ ${result.somaComissoes}<h2>`);
   });
 });
 
