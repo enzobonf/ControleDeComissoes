@@ -27,11 +27,11 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Reservas
+          Comissões
         </h1>
         <ol class="breadcrumb">
           <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-          <li class="active">Reservas</li>
+          <li class="active">Comissões</li>
         </ol>
       </section>
 
@@ -48,7 +48,7 @@
           <div class="box-header" style="height:44px;">
 
             <div class="box-tools">
-              <form action="./reservations" method="GET">
+              <form action="/comissoes" method="GET">
                 <div class="form-group" style="width: 182px; float: left">
                   <div class="input-group">
                     <div class="input-group-addon">
@@ -296,7 +296,7 @@
         });
 
         let request = '';
-        (window.location.search) ? request = window.location.search : request = '';
+        (window.location.search) ? request = window.location.search : request = `?start=${moment().subtract(4, 'year').format('YYYY-MM-DD')}&end=${moment().format('YYYY-MM-DD')}`;
         console.log(request);
 
         fetch(`/comissoes/chart${request}`)

@@ -18,7 +18,7 @@
 
       <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box" onclick="window.location.href = '/admin/reservations'" style="cursor:pointer">
+          <div class="info-box" onclick="window.location.href = '/comissoes'" style="cursor:pointer">
             <span class="info-box-icon bg-aqua">
               <i class="ion ion-ios-calendar"></i>
             </span>
@@ -54,7 +54,7 @@
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box" onclick="window.location.href = '/admin/menus'" style="cursor:pointer">
             <span class="info-box-icon bg-green">
-              <i class="fa fa-cutlery"></i>
+              <i class="fa fa-check"></i>
             </span>
 
             <div class="info-box-content">
@@ -90,11 +90,11 @@
 
   <%- include('inc/footer') -%>
 
-  <script src="/socket.io/socket.io.js'"></script>
+  <!--<script src="/socket.io/socket.io.js'"></script>
 
   <script>
 
-      function refreshDashboard(){
+      /*function refreshDashboard(){
 
         fetch('/admin/dashboard').then(response=>response.json()).then(json=>{
 
@@ -111,7 +111,7 @@
 
       socket.on('dashboard update', function(){
           refreshDashboard();
-      });
+      });*/
 
 
-  </script>
+  </script>-->
