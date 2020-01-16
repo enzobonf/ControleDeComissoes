@@ -3,9 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var redis   = require("redis");
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
+var client = redis.createClient();
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
 var sendTask = require('./inc/sendTask');
 sendTask.executeTask();
@@ -14,7 +17,20 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
+
+app.use(session({
+
+  store: new RedisStore({
+    host: 'localhost',
+    port: 6379,
+    client,
+  }),
+  secret: 'Windows10',
+  resave: true,
+  saveUninitialized: true
+
+}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -23,7 +39,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -3,13 +3,96 @@ var moment = require('moment');
 
 module.exports = {
 
+    getParams(req, params){
+
+        return Object.assign({},{
+            menus: req.menus, 
+            user: req.session.user
+        }, params);
+
+    },
+
+    getMenus(req){
+
+        let menus =  [
+            {
+                text: 'Tela Inicial',
+                href: '/',
+                icon: 'home',
+                active: false
+            },
+            {
+                text: 'Comissões',
+                href: '/comissoes',
+                icon: 'calendar-check-o',
+                active: false
+            },
+            {
+                text: 'Contatos',
+                href: '/contacts',
+                icon: 'comments',
+                active: false
+            },
+            {
+                text: 'Usuários',
+                href: '/users',
+                icon: 'users',
+                active: false
+            },
+            {
+                text: 'E-mails',
+                href: '/emails',
+                icon: 'envelope',
+                active: false
+            }
+        ]
+
+        menus.map(menu=>{
+
+            if(menu.href === `${req.url}`) menu.active = true;
+
+        });
+
+        return menus;
+
+    },
+
+
+    dashboard(){
+
+        return new Promise((resolve, reject)=>{
+
+            let dateNow = moment.parseZone().format("YYYY-MM-DD");
+
+            conn.query(`
+                SELECT
+                    (SELECT IFNULL(SUM(VALOR_COMISSAO), 0) from Comissoes WHERE DATA_RECEBIMENTO < ? and SITUACAO = 0) AS atrasadas,
+                    (SELECT IFNULL(SUM(VALOR_COMISSAO), 0) from Comissoes WHERE DATA_RECEBIMENTO >= ? and SITUACAO = 0) AS emaberto,
+                    (SELECT IFNULL(SUM(VALOR_COMISSAO), 0) from Comissoes WHERE SITUACAO = 1) AS pagas,
+                    (SELECT IFNULL(SUM(VALOR_PEDIDO), 0) from Comissoes) AS totalpedidos;
+            `, [dateNow, dateNow], (err, results)=>{
+
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results[0]);
+                }
+
+            });
+
+        });
+
+
+    },
+
     select(late, req = ''){
 
         return new Promise((resolve, reject)=>{
 
             let dateNow = moment.parseZone().format("YYYY-MM-DD");
 
-            let limit = 20;
+            let limit = 10;
             let year = false;
             let month = false;
 
@@ -58,6 +141,52 @@ module.exports = {
 
 
         });   
+    },
+
+    marcarPaga(id){
+        
+        return new Promise((resolve, reject)=>{
+
+            conn.query(`
+                UPDATE Comissoes SET SITUACAO = 1 WHERE ID_COMISSAO = ?
+            `, [
+                id
+            ], (err, results)=>{
+
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results);
+                }
+
+            });
+
+        });
+
+    },
+
+    delete(id){
+
+        return new Promise((resolve, reject)=>{
+
+            conn.query(`
+                DELETE FROM Comissoes WHERE ID_COMISSAO = ?
+            `, [
+                id
+            ], (err, results)=>{
+
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results);
+                }
+
+            });
+
+        });
+
     }
 
 }
