@@ -191,7 +191,7 @@ module.exports = {
             SELECT
                 CONCAT(YEAR(DATA_RECEBIMENTO), '-', MONTH(DATA_RECEBIMENTO)) AS date,
                 SUM(VALOR_COMISSAO) AS total
-                FROM comissoes
+                FROM Comissoes
             WHERE
                 DATA_RECEBIMENTO BETWEEN ? AND ?
             GROUP BY YEAR(DATA_RECEBIMENTO), MONTH(DATA_RECEBIMENTO)
