@@ -187,6 +187,52 @@ module.exports = {
 
         });
 
+    },
+
+    chart(req){
+
+        return new Promise((resolve, reject)=>{
+
+            conn.query(`
+            SELECT
+                CONCAT(YEAR(DATA_RECEBIMENTO), '-', MONTH(DATA_RECEBIMENTO)) AS date,
+                SUM(VALOR_COMISSAO) AS total
+                FROM comissoes
+            WHERE
+                DATA_RECEBIMENTO BETWEEN ? AND ?
+            GROUP BY YEAR(DATA_RECEBIMENTO), MONTH(DATA_RECEBIMENTO)
+            ORDER BY YEAR(DATA_RECEBIMENTO) ASC, MONTH(DATA_RECEBIMENTO) ASC;
+            `, [
+                req.query.start,
+                req.query.end
+            ], (err, results)=>{
+
+                if(err){
+                    reject(err);
+                }
+                else{
+
+                    let months = [];
+                    let values = [];
+
+                    results.forEach(row=>{
+
+                        months.push(moment(row.date).format('MMM YYYY'));
+                        values.push(row.total);
+
+                    });
+
+                    resolve({
+                        months,
+                        values
+                    });
+
+                }
+
+            })
+
+        });
+
     }
 
 }

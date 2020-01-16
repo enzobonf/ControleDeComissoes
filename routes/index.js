@@ -95,10 +95,10 @@ router.get('/send', function(req, res, next) {
 
 router.get('/comissoes', function(req, res, next) {
 
-  let start = (req.query.start) ? req.query.start : moment().subtract(1, 'year').format('YYYY-MM-DD');
+  let start = (req.query.start) ? req.query.start : moment().subtract(2, 'year').format('YYYY-MM-DD');
   let end = (req.query.end) ? req.query.end : moment().format('YYYY-MM-DD');
   
-  comissoes.select().then(data=>{
+  comissoes.select(false, req).then(data=>{
     res.render('comissoes', comissoes.getParams(req, {
       date: {
         start,
@@ -111,6 +111,19 @@ router.get('/comissoes', function(req, res, next) {
 
   });
 
+});
+
+router.get('/comissoes/chart', function(req, res, next){
+
+  req.query.start = (req.query.start == '') ? req.query.start : moment(new Date()).subtract(4, 'year').format('YYYY-MM-DD');
+  req.query.end = (req.query.end = '') ? req.query.end : moment(new Date()).format('YYYY-MM-DD');
+
+  comissoes.chart(req).then(chartData=>{
+
+      res.send(chartData);
+
+  });
+  
 });
 
 router.post('/comissoes/marcarpaga', function(req, res, next){
