@@ -28,20 +28,14 @@ module.exports = {
                 active: false
             },
             {
-                text: 'Contatos',
-                href: '/contacts',
-                icon: 'comments',
-                active: false
-            },
-            {
                 text: 'Usuários',
                 href: '/users',
                 icon: 'users',
                 active: false
             },
             {
-                text: 'E-mails',
-                href: '/emails',
+                text: 'Enviar email',
+                href: '/send',
                 icon: 'envelope',
                 active: false
             }
