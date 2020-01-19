@@ -5,7 +5,7 @@
 
     if(situation == false){
 
-        if(receivementDate < new Date().toLocaleDateString()){
+        if(receivementDate < Date.now()){
             return 'Atrasada';
         }
         else{
@@ -79,7 +79,6 @@
             <table class="table table-striped table-hover">
               <thead>
                 <tr>
-                  <th style="width: 10px">#</th>
                   <th>Pedido</th>
                   <th>Valor Comissão</th>
                   <th>Forma de Pagamento</th>
@@ -91,22 +90,22 @@
               <tbody>
                 <% data.forEach(function(row){ %>
                 <tr data-row="<%= JSON.stringify(row); %>">
-                  <td><%= row.ID_COMISSAO %></td>
                   <td><%= row.ID_PEDIDO %></td>
                   <td>R$ <%= row.VALOR_COMISSAO %></td>
                   <td><%= row.FORMA_PAGAMENTO %></td>
                   <td><%= moment.parseZone(row.DATA_RECEBIMENTO).format("DD/MM/YYYY") %></td>
-                  <td><%= getSituation(row.SITUACAO, moment.parseZone(row.DATA_RECEBIMENTO).format("YYYY-MM-DD")) %></td>
+                  <td><%- getSituation(row.SITUACAO, moment.parseZone(row.DATA_RECEBIMENTO).valueOf()) %></td>
                   <td>
-                    <button type="button" class="btn btn-xs btn-success btn-marcarpaga">
-                      <i class="fa fa-pencil"></i> Marcar como paga
-                    </button>&nbsp;
                     <button type="button" class="btn btn-xs btn-info btn-update">
                       <i class="fa fa-pencil"></i> Editar
                     </button>&nbsp;
                     <button type="button" class="btn btn-xs btn-danger btn-delete">
                       <i class="fa fa-trash"></i> Excluir
-                    </button></td>
+                    </button>&nbsp;
+                    <button <% if(row.SITUACAO === 1){%> style="display:none" <% } %> type="button" class="btn btn-xs btn-success btn-marcarpaga">
+                      <i class="fa fa-pencil"></i> Marcar como paga
+                    </button>
+                  </td>
                 </tr>
                 <% }); %>
               </tbody>
@@ -128,46 +127,63 @@
 
     <div class="modal fade" id="modal-create">
       <div class="modal-dialog">
-        <div class="modal-content" style="border-top: 3px solid #00a65a;">
-          <form method="post" action="/admin/reservations">
+        <div class="modal-content" style="border-top: 3px solid #00c0ef;">
+          <form method="post" action="/comissoes">
+            <input type="hidden" name="ID_COMISSAO">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title">Nova Reserva</h4>
+              <h4 class="modal-title">Editar Reserva</h4>
             </div>
             <div class="modal-body">
               <div class="form-group">
-                <label for="inputNameCreate">Nome</label>
-                <input type="text" class="form-control" id="inputNameCreate" name="name">
+                <label for="inputIdPedidoCreate">Pedido</label>
+                <input type="text" class="form-control" id="inputIdPedidoCreate" name="ID_PEDIDO">
               </div>
               <div class="form-group">
-                <label for="inputEmailCreate">E-mail</label>
-                <input type="email" class="form-control" id="inputEmailCreate" name="email">
+                <label for="inputValorPedidoCreate">Valor Pedido</label>
+                <input type="number" step="0.010" class="form-control" id="inputValorPedidoCreate" name="VALOR_PEDIDO">
               </div>
               <div class="form-group">
-                <label for="inputPeopleCreate">Pessoas</label>
-                <select id="inputPeopleCreate" name="people" class="form-control">
+                <label for="inputPorcentagemCreate">Porcentagem (%)</label>
+                <input name="PORCENTAGEM" type="number" min="1" max="100" value="6" class="form-control" id="inputPorcentagemCreate">
+              </div>
+              <div class="form-group">
+                <label for="inputValorComissaoCreate">Valor Comissão</label>
+                <input type="number" step="0.010" class="form-control" id="inputValorComissaoCreate" name="VALOR_COMISSAO">
+              </div>
+              <div class="form-group">
+                <label for="inputFormaPagamentoCreate">Forma de Pagamento</label>
+                <select id="inputFormaPagamentoCreate" name="FORMA_PAGAMENTO" class="form-control">
                   <option value=""> -- selecione -- </option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5+</option>
+                  <option value="PagSeguro">PagSeguro</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="inputDateCreate">Data</label>
-                <input type="date" id="inputDateCreate" name="date" class="form-control">
+                <label for="inputDateUpdateCreate">Data Pedido</label>
+                <input type="date" id="inputDataPedidoCreate" name="DATA_PEDIDO" class="form-control">
               </div>
               <div class="form-group">
-                <label for="inputTimeCreate">Hora</label>
-                <input type="time" id="inputTimeCreate" name="time" class="form-control">
+                <label for="inputPorcentagemCreate">Prazo para liberação (dias)</label>
+                <input name="PRAZO" type="number" min="1" max="100" value="14" class="form-control" id="inputPrazoCreate">
+              </div>
+              <div class="form-group">
+                <label for="inputDateCreate">Data Recebimento</label>
+                <input type="date" id="inputDataRecebimentoCreate" name="DATA_RECEBIMENTO" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="inputSituacaoCreate">Situação</label>
+                <select id="inputSituacaoCreate" name="SITUACAO" class="form-control">
+                  <option value=""> -- selecione -- </option>
+                  <option value="1">Paga</option>
+                  <option value="0">Em aberto</option>
+                </select>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-success">Salvar</button>
+              <button type="submit" class="btn btn-info">Salvar</button>
             </div>
           </form>
         </div>
@@ -179,8 +195,8 @@
     <div class="modal fade" id="modal-update">
       <div class="modal-dialog">
         <div class="modal-content" style="border-top: 3px solid #00c0ef;">
-          <form method="post" action="/admin/reservations">
-            <input type="hidden" name="id">
+          <form method="post" action="/comissoes">
+            <input type="hidden" name="ID_COMISSAO">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -189,31 +205,47 @@
             </div>
             <div class="modal-body">
               <div class="form-group">
-                <label for="inputNameUpdate">Nome</label>
-                <input type="text" class="form-control" id="inputNameUpdate" name="name">
+                <label for="inputIdPedidoUpdate">Pedido</label>
+                <input type="text" class="form-control" id="inputIdPedidoUpdate" name="ID_PEDIDO">
               </div>
               <div class="form-group">
-                <label for="inputEmailUpdate">E-mail</label>
-                <input type="email" class="form-control" id="inputEmailUpdate" name="email">
+                <label for="inputEmailUpdateUpdate">Valor Pedido</label>
+                <input type="number" step="0.010" class="form-control" id="inputValorPedidoUpdate" name="VALOR_PEDIDO">
               </div>
               <div class="form-group">
-                <label for="inputPeopleUpdate">Pessoas</label>
-                <select id="inputPeopleUpdate" name="people" class="form-control">
+                <label for="inputPorcentagemUpdate">Porcentagem (%)</label>
+                <input name="PORCENTAGEM" type="number" min="1" max="100" value="6" class="form-control" id="inputPorcentagemUpdate">
+              </div>
+              <div class="form-group">
+                <label for="inputValorComissaoUpdate">Valor Comissão</label>
+                <input type="number" step="0.010" class="form-control" id="inputValorComissaoUpdate" name="VALOR_COMISSAO">
+              </div>
+              <div class="form-group">
+                <label for="inputFormaPagamentoUpdate">Forma de Pagamento</label>
+                <select id="inputFormaPagamentoUpdate" name="FORMA_PAGAMENTO" class="form-control">
                   <option value=""> -- selecione -- </option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5+</option>
+                  <option value="PagSeguro">PagSeguro</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="inputDateUpdate">Data</label>
-                <input type="date" id="inputDateUpdate" name="date" class="form-control">
+                <label for="inputDataPedidoUpdate">Data Pedido</label>
+                <input type="date" id="inputDataPedidoUpdate" name="DATA_PEDIDO" class="form-control">
               </div>
               <div class="form-group">
-                <label for="inputTimeUpdate">Hora</label>
-                <input type="time" id="inputTimeUpdate" name="time" class="form-control">
+                <label for="inputPorcentagemUpdate">Prazo para liberação (dias)</label>
+                <input name="PRAZO" type="number" min="1" max="100" value="14" class="form-control" id="inputPrazoUpdate">
+              </div>
+              <div class="form-group">
+                <label for="inputDateUpdate">Data Recebimento</label>
+                <input type="date" id="inputDataRecebimentoUpdate" name="DATA_RECEBIMENTO" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="inputSituacaoUpdate">Situação</label>
+                <select id="inputSituacaoUpdate" name="SITUACAO" class="form-control">
+                  <option value=""> -- selecione -- </option>
+                  <option value="1">Paga</option>
+                  <option value="0">Em aberto</option>
+                </select>
               </div>
             </div>
             <div class="modal-footer">
@@ -233,21 +265,79 @@
     <script src="/bower_components/chart.js/dist/Chart.min.js"></script>
     <script src="/js/hcode-grid.js"></script>
     <script src="/js/form-save.js"></script>
-    <script>
+    <script> 
+
+        let forms = document.querySelectorAll('form');
+        forms.forEach(form=>{
+
+          let inputPrazo = form.querySelector(`[name=PRAZO]`);
+          if(inputPrazo){
+            initLeaveInputPrazo(form, inputPrazo);
+          }
+
+          let inputPorcentagem = form.querySelector(`[name=PORCENTAGEM]`);
+          if(inputPorcentagem){
+            initLeaveInputPorcentagem(form, inputPorcentagem);
+          }
+
+
+        });
+
+        function initLeaveInputPorcentagem(form, input) {
+
+          input.addEventListener('blur', e=>{
+
+              let valorPedido = form.querySelector(`[name=VALOR_PEDIDO]`).value;
+
+              if(!input.value || !valorPedido){
+                  alert('Preencha os campos corretamente!');
+              }
+              else{
+                  form.querySelector(`[name=VALOR_COMISSAO]`).value = ((input.value / 100) * valorPedido).toFixed(2);
+              }
+
+          });
+            
+        }
+
+        function initLeaveInputPrazo(form, input){
+
+          input.addEventListener('blur', e=>{
+
+            let dataPedido = form.querySelector(`[name=DATA_PEDIDO]`).value;
+
+            if(!input.value || !dataPedido){
+                alert('Preencha os dados corretamente!');
+            }
+            else{
+                form.querySelector(`[name=DATA_RECEBIMENTO]`).value = moment(dataPedido).add(input.value, 'days').format("YYYY-MM-DD");
+            }
+
+          });
+
+
+        }
 
         new HcodeGrid({
           deleteUrl: '/comissoes/${data.ID_COMISSAO}',
           deleteMessage: 'Deseja realmente excluir a comissão do pedido ${data.ID_PEDIDO}?',
-          marcarPagaUrl: 'comissoes/marcarpaga',
+          marcarPagaUrl: '/comissoes/marcarpaga',
           marcarPagaMessage: 'Deseja realmente marcar a comissão do pedido ${data.ID_PEDIDO} como paga?',
           btnMarcarPaga: 'btn-marcarpaga',
           onUpdateLoad: (form, name, data)=>{            
               let input = form.querySelector(`[name=${name}`);
-
               switch(name){
 
-                case 'date':
-                  if (input) input.value = moment.parseZone(data[name]).format("YYYY-MM-DD");
+                case 'DATA_RECEBIMENTO':
+                  if(input){
+                    let date = moment.parseZone(data[name]).format("YYYY-MM-DD");
+                    input.value = date;
+                    form.querySelector(`[name=DATA_PEDIDO]`).value = moment(date).subtract(14, 'days').format("YYYY-MM-DD");
+                  }
+                break;
+
+                case 'VALOR_PEDIDO':
+                  if (input) input.value = parseFloat(data[name].replace(',', '.'));
                 break;
 
                 default:
@@ -297,7 +387,6 @@
 
         let request = '';
         (window.location.search) ? request = window.location.search : request = `?start=${moment().subtract(4, 'year').format('YYYY-MM-DD')}&end=${moment().format('YYYY-MM-DD')}`;
-        console.log(request);
 
         fetch(`/comissoes/chart${request}`)
           .then(response=>response.json())

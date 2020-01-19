@@ -7,7 +7,7 @@ function getSituation(situation, receivementDate){
 
     if(situation == false){
 
-        if(receivementDate < new Date().toLocaleDateString()){
+        if(receivementDate < Date.now()){
             return 'Atrasada';
         }
         else{
@@ -48,7 +48,7 @@ function getTr(results){
                 <td align='center' valign='middle'>${result.VALOR_PEDIDO}</td>
                 <td align='center' valign='middle'>${result.VALOR_COMISSAO}</td>
                 <td align='center' valign='middle'>${moment.parseZone(result.DATA_RECEBIMENTO).format("DD/MM/YYYY")}</td>
-                <td align='center' valign='middle'>${getSituation(result.SITUACAO, moment.parseZone(result.DATA_RECEBIMENTO).format("YYYY-MM-DD"))}</td>
+                <td align='center' valign='middle'>${getSituation(result.SITUACAO, moment.parseZone(result.DATA_RECEBIMENTO).valueOf())}</td>
             </tr>
         `);
         somaComissoes = somaComissoes + parseFloat(result.VALOR_COMISSAO);

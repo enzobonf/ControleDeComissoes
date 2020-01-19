@@ -62,7 +62,6 @@ class HcodeGrid{
         this.formUpdate = document.querySelector(this.options.formUpdate);
 
         if(this.formUpdate){
-
             this.formUpdate.save({
                 success:()=>{
                     this.fireEvent('afterFormUpdate');
@@ -132,15 +131,14 @@ class HcodeGrid{
 
         let data = this.getTrData(e);
 
+        let formData = new FormData();
+        formData.append('ID_COMISSAO', data.ID_COMISSAO);
+
         if(confirm(eval('`' + this.options.marcarPagaMessage + '`'))){
             fetch(eval('`' + this.options.marcarPagaUrl + '`'), {
 
                 method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
+                body: formData
 
 
             }).then(response=>response.json())

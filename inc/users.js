@@ -60,14 +60,20 @@ module.exports = {
 
         return new Promise((resolve, reject)=>{
             conn.query(`
-                SELECT id, name, email FROM tb_users ORDER BY name`,
+                SELECT Usuarios.ID_USUARIO, Usuarios.NOME_USUARIO, Usuarios.LOGIN_USUARIO,
+                Usuarios.STATUS_USUARIO, Usuarios.DATA_CADASTRO, Nivel_Acesso.NOME_NIVEL 
+                FROM Usuarios 
+                inner join Nivel_Acesso 
+                ON Usuarios.ID_NIVEL = Nivel_Acesso.ID_NIVEL`,
             (err, results)=>{
             
                 if(err){
                     reject(err);
                 }
+                else{
+                    resolve(results);
+                }
                 
-                resolve(results);
 
             });
         });
@@ -151,9 +157,9 @@ module.exports = {
             else{
 
                 conn.query(`
-                    UPDATE tb_users
-                    SET password = ?
-                    WHERE id = ?
+                    UPDATE Usuarios
+                    SET SENHA_USUARIO = ?
+                    WHERE ID_USUARIO = ?
                 `, [
                     req.fields.password,
                     req.fields.id

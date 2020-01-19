@@ -19,6 +19,7 @@ function getResponse(result){
 }
 
 router.use(function(req, res, next){
+
   if((req.url).indexOf('/login') === -1 && !req.session.user){
       res.redirect('/login');
   }
@@ -43,7 +44,7 @@ router.get('/login', function(req, res, next){
 });
 
 router.post('/login', function(req, res, next){
-
+  
   if(!req.body.user){
       users.render(req, res, "Preencha o campo usuário!");
   }
@@ -105,11 +106,23 @@ router.get('/comissoes', function(req, res, next) {
         end
       },
       data,
-      moment,
-      situationFunction: 'getSituation(row.SITUACAO, moment.parseZone(row.DATA_RECEBIMENTO).format("YYYY-MM-DD"));'
+      moment
     }));
 
   });
+
+});
+
+router.post('/comissoes', function(req, res, next){
+
+  comissoes.save(req.body).then(results=>{
+
+      res.send(results);
+
+  }).catch(err=>{
+      res.send(err);
+  });
+  
 
 });
 
@@ -149,6 +162,39 @@ router.delete('/comissoes/:id', function(req, res, next){
   });
 
 });
+
+router.get('/users', function(req, res, next){
+
+  users.getUsers().then(data=>{
+
+    res.render('users', comissoes.getParams(req, {
+      data,
+      moment
+    }));
+
+  });
+  
+});
+
+router.post('/users/password-change', function(req, res, next){
+
+  if(req.fields.password) req.fields.password = md5(req.fields.password);
+  if(req.fields.passwordConfirm) req.fields.passwordConfirm = md5(req.fields.passwordConfirm);
+
+  users.changePassword(req).then(results=>{
+
+      res.send(results);
+
+  }).catch(err=>{
+
+      res.send({
+          error: err
+      });
+      
+  });
+
+});
+
 
 router.get('/list', function(req, res, next) {
   sendTask.listAll(req).then(result=>{ 

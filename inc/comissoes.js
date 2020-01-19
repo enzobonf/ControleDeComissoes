@@ -137,6 +137,61 @@ module.exports = {
         });   
     },
 
+    save(fields){
+
+        return new Promise((resolve, reject)=>{
+
+            //let date = fields.date.split('/');
+        
+            //fields.date = `${date[2]}-${date[1]}-${date[0]}`;*/
+            console.log(fields)
+            let query, params = [
+                fields.ID_PEDIDO,
+                fields.VALOR_PEDIDO,
+                fields.VALOR_COMISSAO,
+                fields.FORMA_PAGAMENTO,
+                fields.DATA_RECEBIMENTO,
+                fields.SITUACAO
+            ];
+
+            if(parseInt(fields.ID_COMISSAO) > 0){
+                query = `
+                    UPDATE Comissoes
+                    SET
+                        ID_PEDIDO = ?,
+                        VALOR_PEDIDO = ?,
+                        VALOR_COMISSAO = ?,
+                        FORMA_PAGAMENTO = ?,
+                        DATA_RECEBIMENTO = ?,
+                        SITUACAO = ?
+                    WHERE ID_COMISSAO = ?
+                `;
+                params.push(fields.ID_COMISSAO);
+            }
+            else{
+                query = `
+                    INSERT INTO Comissoes (ID_PEDIDO, VALOR_PEDIDO, VALOR_COMISSAO, FORMA_PAGAMENTO, DATA_RECEBIMENTO, SITUACAO)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                `;
+            }
+
+            conn.query(query, params, (err, results)=>{
+
+                if(err){
+                    console.log(err);
+                    reject(err);
+                }
+                else{
+                    resolve(results);
+                }
+
+            });
+
+        });
+
+
+    },
+
     marcarPaga(id){
         
         return new Promise((resolve, reject)=>{
