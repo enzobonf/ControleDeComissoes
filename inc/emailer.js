@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const credentials = require('./credentials.json');
 
 module.exports = {
 
@@ -7,8 +8,8 @@ module.exports = {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth:{
-                user: 'enzobonfx@gmail.com',
-                pass: '3nz02002'
+                user: credentials.email,
+                pass: credentials.password
             }
         });
 

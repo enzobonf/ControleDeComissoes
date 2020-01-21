@@ -101,3 +101,6 @@ typings/
 
 # TernJS port file
 .tern-port
+
+# email credentials
+inc/credentials.json

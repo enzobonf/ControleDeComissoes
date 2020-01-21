@@ -2,6 +2,7 @@ const comissoes = require('./comissoes');
 const CronJob = require('cron').CronJob;
 let emailer = require('./emailer');
 let moment = require('moment');
+const credentials = require('./credentials.json');
 
 function getSituation(situation, receivementDate){
 
@@ -32,7 +33,7 @@ function getTr(results){
     let tr = `<html>
                 <body>
                     <p>
-                    <table style='border-radius: 5px; font-family: Calibri;' border='1' cellpadding='0' cellspacing='0'>
+                    <table style=border-radius: 5px; font-family: Calibri;' border='1' cellpadding='0' cellspacing='0'>
                         <thead>
                         <tr>
                             <th align='center' valign='middle'>Pedido</th>
@@ -88,7 +89,7 @@ function sendEmail(){
                     Espero que me pague rápido kkkkkkk <p>        
                     (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
                 
-                emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'leandra@golfershoes.com.br').then(result=>{
+                emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
                     resolve({
                         message: 'Email enviado com sucesso!',
                         table: tr,
