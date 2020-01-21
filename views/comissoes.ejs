@@ -5,7 +5,10 @@
 
     if(situation == false){
 
-        if(receivementDate < Date.now()){
+        let today = new Date(moment().format('YYYY-MM-DD'));
+        receivementDate = new Date(receivementDate);
+
+        if(receivementDate < today){
             return 'Atrasada';
         }
         else{
@@ -102,9 +105,11 @@
                     <button type="button" class="btn btn-xs btn-danger btn-delete">
                       <i class="fa fa-trash"></i> Excluir
                     </button>&nbsp;
-                    <button <% if(row.SITUACAO === 1){%> style="display:none" <% } %> type="button" class="btn btn-xs btn-success btn-marcarpaga">
+                    <% if(row.SITUACAO === 0){%>
+                    <button type="button" class="btn btn-xs btn-success btn-marcarpaga">
                       <i class="fa fa-pencil"></i> Marcar como paga
                     </button>
+                    <% } %> 
                   </td>
                 </tr>
                 <% }); %>

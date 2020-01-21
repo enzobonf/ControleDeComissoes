@@ -7,7 +7,10 @@ function getSituation(situation, receivementDate){
 
     if(situation == false){
 
-        if(receivementDate < Date.now()){
+        let today = new Date(moment().format('YYYY-MM-DD'));
+        receivementDate = new Date(receivementDate);
+
+        if(receivementDate < today){
             return 'Atrasada';
         }
         else{
@@ -48,7 +51,7 @@ function getTr(results){
                 <td align='center' valign='middle'>${result.VALOR_PEDIDO}</td>
                 <td align='center' valign='middle'>${result.VALOR_COMISSAO}</td>
                 <td align='center' valign='middle'>${moment.parseZone(result.DATA_RECEBIMENTO).format("DD/MM/YYYY")}</td>
-                <td align='center' valign='middle'>${getSituation(result.SITUACAO, moment.parseZone(result.DATA_RECEBIMENTO).valueOf())}</td>
+                <td align='center' valign='middle'>${getSituation(result.SITUACAO, moment.parseZone(result.DATA_RECEBIMENTO).format("YYYY-MM-DD"))}</td>
             </tr>
         `);
         somaComissoes = somaComissoes + parseFloat(result.VALOR_COMISSAO);
@@ -83,19 +86,19 @@ function sendEmail(){
                     Existem ${results.length} comissões atrasadas. <br>
                     Somando um valor total de R$ ${somaComissoes}, <br>
                     Espero que me pague rápido kkkkkkk <p>        
-                    (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm")})`;
+                    (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
                 
-                emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'leandra@golfershoes.com.br').then(result=>{
+                //emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'leandra@golfershoes.com.br').then(result=>{
                     resolve({
                         message: 'Email enviado com sucesso!',
                         table: tr,
                         somaComissoes
                     });
-                }).catch(err=>{
+                /*}).catch(err=>{
                     reject({
                         message: err
                     });
-                });
+                });*/
 
             }
             else{

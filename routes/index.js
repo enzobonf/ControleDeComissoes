@@ -21,6 +21,7 @@ function getResponse(result){
 router.use(function(req, res, next){
 
   if((req.url).indexOf('/login') === -1 && !req.session.user){
+      req.session.redirectTo = req.url;
       res.redirect('/login');
   }
   else{
@@ -44,7 +45,7 @@ router.get('/login', function(req, res, next){
 });
 
 router.post('/login', function(req, res, next){
-  
+
   if(!req.body.user){
       users.render(req, res, "Preencha o campo usuário!");
   }
@@ -53,9 +54,15 @@ router.post('/login', function(req, res, next){
   }
   else{
       users.login(req.body.user, md5(req.body.password)).then(user=>{
-          console.log(user);
+
           req.session.user = user;
-          res.redirect('/');
+
+          let url = '/';
+
+          if(req.session.redirectTo && req.session.redirectTo !== '/') url = req.session.redirectTo;
+          delete req.session.redirectTo;
+
+          res.redirect(url);
 
       }).catch(err=>{
           users.render(req, res, err.message || err);
@@ -165,10 +172,14 @@ router.delete('/comissoes/:id', function(req, res, next){
 
 router.get('/users', function(req, res, next){
 
-  users.getUsers().then(data=>{
+  users.getUsers().then(results=>{
+
+    let data = results[0];
+    let userLevels = results[1];
 
     res.render('users', comissoes.getParams(req, {
       data,
+      userLevels,
       moment
     }));
 

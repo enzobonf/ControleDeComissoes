@@ -19,7 +19,7 @@ module.exports = {
                 FROM Usuarios 
                 inner join Nivel_Acesso 
                 ON Usuarios.ID_NIVEL = Nivel_Acesso.ID_NIVEL 
-                WHERE LOGIN_USUARIO = ?
+                WHERE LOGIN_USUARIO = ?;
             `,[
                 user
             ], (err, results)=>{
@@ -64,9 +64,10 @@ module.exports = {
                 Usuarios.STATUS_USUARIO, Usuarios.DATA_CADASTRO, Nivel_Acesso.NOME_NIVEL 
                 FROM Usuarios 
                 inner join Nivel_Acesso 
-                ON Usuarios.ID_NIVEL = Nivel_Acesso.ID_NIVEL`,
+                ON Usuarios.ID_NIVEL = Nivel_Acesso.ID_NIVEL;
+                SELECT NOME_NIVEL FROM Nivel_Acesso`,
             (err, results)=>{
-            
+
                 if(err){
                     reject(err);
                 }
