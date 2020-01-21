@@ -88,17 +88,17 @@ function sendEmail(){
                     Espero que me pague rápido kkkkkkk <p>        
                     (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
                 
-                //emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'leandra@golfershoes.com.br').then(result=>{
+                emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, 'enzobonfx@gmail.com').then(result=>{
                     resolve({
                         message: 'Email enviado com sucesso!',
                         table: tr,
                         somaComissoes
                     });
-                /*}).catch(err=>{
+                }).catch(err=>{
                     reject({
                         message: err
                     });
-                });*/
+                });
 
             }
             else{
