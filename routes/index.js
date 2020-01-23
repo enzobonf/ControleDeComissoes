@@ -190,28 +190,20 @@ router.get('/users', function(req, res, next){
 
 router.post('/users', function(req, res, next){
 
-  if(req.session.user.NIVEL_USUARIO === 'Administrador'){
-  
-    if(req.fields.SENHA_USUARIO) req.fields.SENHA_USUARIO = md5(req.fields.SENHA_USUARIO);
+  if(req.fields.SENHA_USUARIO) req.fields.SENHA_USUARIO = md5(req.fields.SENHA_USUARIO);
 
-    users.save(req.fields).then(results=>{
+  users.save(req.fields).then(results=>{
 
-      res.send(results);
+    res.send(results);
 
-    }).catch(err=>{
+  }).catch(err=>{
 
-      res.send({
-        error: err
-      });
-      
-    });
-
-  }
-  else{
     res.send({
-      error: 'Você não tem permissões suficientes para isso!'
+      error: err
     });
-  }
+    
+  });
+
 
 });
 
