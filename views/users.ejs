@@ -218,6 +218,12 @@
           buttonClick:(btn, data, e)=>{
             document.querySelector('#modal-update-password form [name=id]').value = data.ID_USUARIO;
             $('#modal-update-password').modal('show');
+          },
+          afterFormCreateError:(err)=>{
+            alert(err);
+          },
+          afterFormUpdateError:(err)=>{
+            alert(err);
           }
       },
       userLevel
@@ -231,11 +237,6 @@
             alert(err);
         }
     });
-
-
-    document.querySelector('#modal-create form').save(formConfig);
-
-    document.querySelector('#modal-update form').save(formConfig);
 
     document.querySelector('#modal-update-password form').save(formConfig);
 

@@ -66,8 +66,8 @@ class HcodeGrid{
                 success:()=>{
                     this.fireEvent('afterFormUpdate');
                 },
-                failure:()=>{
-                    this.fireEvent('afterFormUpdateError')
+                failure:(err)=>{
+                    this.fireEvent('afterFormUpdateError', [err])
                 }
             });
 
