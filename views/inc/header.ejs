@@ -96,7 +96,7 @@
           <!-- Optionally, you can add icons to the links -->
           <% menus.forEach(function(menu){ %>
             <li <% if(menu.active){%> class="active" <% } %>>
-              <a href="<%= menu.href %>">
+              <a href="<%= menu.href %>" <% if (menu.onclick){ %> onclick="<%= menu.onclick %>" <% } %>>
                 <i class="fa fa-<%= menu.icon %>"></i>
                 <span><%= menu.text %></span>
               </a>

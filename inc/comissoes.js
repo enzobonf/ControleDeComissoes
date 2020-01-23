@@ -35,9 +35,10 @@ module.exports = {
             },
             {
                 text: 'Enviar email',
-                href: '/send',
+                href: '#',
                 icon: 'envelope',
-                active: false
+                active: false,
+                onclick: 'sendEmail()'
             }
         ]
 
