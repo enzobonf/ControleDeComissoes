@@ -1,4 +1,5 @@
 var conn = require('./db');
+var moment = require('moment');
 
 module.exports = {
 
@@ -61,11 +62,11 @@ module.exports = {
         return new Promise((resolve, reject)=>{
             conn.query(`
                 SELECT Usuarios.ID_USUARIO, Usuarios.NOME_USUARIO, Usuarios.LOGIN_USUARIO,
-                Usuarios.STATUS_USUARIO, Usuarios.DATA_CADASTRO, Nivel_Acesso.NOME_NIVEL 
+                Usuarios.STATUS_USUARIO, Usuarios.DATA_CADASTRO, Usuarios.ID_NIVEL, Nivel_Acesso.NOME_NIVEL 
                 FROM Usuarios 
                 inner join Nivel_Acesso 
                 ON Usuarios.ID_NIVEL = Nivel_Acesso.ID_NIVEL;
-                SELECT NOME_NIVEL FROM Nivel_Acesso`,
+                SELECT ID_NIVEL, NOME_NIVEL FROM Nivel_Acesso`,
             (err, results)=>{
 
                 if(err){
@@ -85,39 +86,55 @@ module.exports = {
         return new Promise((resolve, reject)=>{
 
             let query, params = [
-                fields.name,
-                fields.email
+                fields.NOME_USUARIO,
+                fields.LOGIN_USUARIO,
+                fields.STATUS_USUARIO,
+                fields.ID_NIVEL
             ];
 
-            if(parseInt(fields.id) > 0){
+            if(parseInt(fields.ID_USUARIO) > 0){
                 query = `
-                    UPDATE tb_users
+                    UPDATE Usuarios
                     SET
-                        name = ?,
-                        email = ?
-                    WHERE id = ?
+                        NOME_USUARIO = ?,
+                        LOGIN_USUARIO = ?,
+                        STATUS_USUARIO = ?,
+                        ID_NIVEL = ?
+                    WHERE ID_USUARIO = ?
                 `;
-                params.push(fields.id);
+                params.push(fields.ID_USUARIO);
             }
             else{
                 query = `
-                    INSERT INTO tb_users (name, email, password)
-                    VALUES(?, ?, ?)
+                    INSERT INTO Usuarios (NOME_USUARIO, LOGIN_USUARIO, STATUS_USUARIO, ID_NIVEL, DATA_CADASTRO, SENHA_USUARIO)
+                    VALUES(?, ?, ?, ?, ?, ?)
                 `;
-                params.push(fields.password);
+                params.push(moment().tz('America/Bahia').format('YYYY-MM-DD'));
+                params.push(fields.SENHA_USUARIO);
             }
 
-            conn.query(query, params, (err, results)=>{
-
+            conn.query('SELECT * FROM Usuarios WHERE LOGIN_USUARIO = ?', fields.LOGIN_USUARIO, (err, results)=>{
                 if(err){
-                    console.log(err);
-                    reject(err);
+                    reject(err.message);
+                }
+                else if(results.length > 0 && results[0].ID_USUARIO !== parseInt(fields.ID_USUARIO)){
+                    reject('Este login já está em uso!');
                 }
                 else{
-                    resolve(results);
+                    conn.query(query, params, (err, results)=>{
+
+                        if(err){
+                            console.log(err);
+                            reject(err.message);
+                        }
+                        else{
+                            resolve(results);
+                        }
+        
+                    });
                 }
 
-            });
+            });       
 
         });   
     },
@@ -127,7 +144,7 @@ module.exports = {
         return new Promise((resolve, reject)=>{
 
             conn.query(`
-                DELETE FROM tb_users WHERE id = ?
+                DELETE FROM Usuarios WHERE ID_USUARIO = ?
             `, [
                 id
             ], (err, results)=>{

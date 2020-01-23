@@ -44,9 +44,11 @@
         <div class="box">
           <div class="box-header">
             <h3 class="box-title">Lista</h3>
-            <a href="#" class="btn btn-xs pull-right btn-success" data-toggle="modal" data-target="#modal-create"><i
+            <% if(thisUserLevel === 'Administrador') { %>
+              <a href="#" class="btn btn-xs pull-right btn-success" data-toggle="modal" data-target="#modal-create"><i
                 class="fa fa-plus"></i>
               Novo</a>
+            <% } %>
           </div>
           <div class="box-header" style="height:44px;">
 
@@ -96,7 +98,7 @@
                   <td><%= row.ID_PEDIDO %></td>
                   <td>R$ <%= row.VALOR_COMISSAO %></td>
                   <td><%= row.FORMA_PAGAMENTO %></td>
-                  <td><%= moment.parseZone(row.DATA_RECEBIMENTO).format("DD/MM/YYYY") %></td>
+                  <td><%= moment(row.DATA_RECEBIMENTO).parseZone().format("DD/MM/YYYY") %></td>
                   <td><%- getSituation(row.SITUACAO, moment.parseZone(row.DATA_RECEBIMENTO).valueOf()) %></td>
                   <td>
                     <button type="button" class="btn btn-xs btn-info btn-update">
@@ -323,6 +325,8 @@
 
         }
 
+        let userLevel = '<%= thisUserLevel %>';
+
         new HcodeGrid({
           deleteUrl: '/comissoes/${data.ID_COMISSAO}',
           deleteMessage: 'Deseja realmente excluir a comissão do pedido ${data.ID_PEDIDO}?',
@@ -350,7 +354,8 @@
                 break;
                 
               }
-          }
+          },
+          userLevel
         });
 
         let chart = new Chart(document.querySelector('#chart').getContext('2d'), {

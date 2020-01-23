@@ -157,25 +157,32 @@ class HcodeGrid{
 
                 btn.addEventListener('click', e=>{
 
-                    if(e.target.classList.contains(this.options.btnUpdate)){
+                    if(this.options.userLevel === 'Administrador'){
 
-                        this.btnUpdateClick(e);
+                        if(e.target.classList.contains(this.options.btnUpdate)){
 
-                    }
-                    else if(e.target.classList.contains(this.options.btnDelete)){
+                            this.btnUpdateClick(e);
 
-                        this.btnDeleteClick(e);
+                        }
+                        else if(e.target.classList.contains(this.options.btnDelete)){
 
-                    }
-                    else if(e.target.classList.contains(this.options.btnMarcarPaga)){
+                            this.btnDeleteClick(e);
 
-                        this.btnMarcarPagaClick(e);
+                        }
+                        else if(e.target.classList.contains(this.options.btnMarcarPaga)){
+
+                            this.btnMarcarPagaClick(e);
+
+                        }
+                        else{
+
+                            this.fireEvent('buttonClick', [e.target, this.getTrData(e), e]);
+
+                        }
 
                     }
                     else{
-
-                        this.fireEvent('buttonClick', [e.target, this.getTrData(e), e]);
-
+                        alert('Você não tem permissão para isso!');
                     }
 
                 });

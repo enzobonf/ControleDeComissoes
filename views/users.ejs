@@ -19,7 +19,11 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">Lista</h3>
-            <a href="#" class="btn btn-xs pull-right btn-success" data-toggle="modal" data-target="#modal-create"><i class="fa fa-plus"></i> Novo</a>
+            <% if(thisUserLevel === 'Administrador') { %>
+              <a href="#" class="btn btn-xs pull-right btn-success" data-toggle="modal" data-target="#modal-create"><i
+                class="fa fa-plus"></i>
+              Novo</a>
+            <% } %>
         </div>
         <!-- /.box-header -->
         <div class="box-body no-padding">
@@ -29,7 +33,7 @@
                     <th style="width: 10px">#</th>
                     <th>Nome</th>
                     <th>Login</th>
-                    <th>Cargo</th>
+                    <th>Nível</th>
                     <th>Status</th>
                     <th>Cadastro</th>
                     <th style="min-width: 134px;">Ações</th>
@@ -110,15 +114,32 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="inputNameCreate">Nome</label>
-              <input type="text" class="form-control" id="inputNameCreate" name="name">
+              <input type="text" class="form-control" id="inputNameCreate" name="NOME_USUARIO">
             </div>
             <div class="form-group">
-              <label for="inputEmailCreate">E-mail</label>
-              <input type="email" class="form-control" id="inputEmailCreate" name="email">
+              <label for="inputLoginCreate">Login</label>
+              <input type="text" class="form-control" id="inputLoginCreate" name="LOGIN_USUARIO">
             </div>
             <div class="form-group">
-              <label for="inputPasswordCreate">Senha</label>
-              <input type="password" class="form-control" id="inputPasswordCreate" name="password">
+              <label for="inputNiveCreate">Nível</label>
+              <select id="inputNivelCreate" name="ID_NIVEL" class="form-control">
+                <option value="Inativo"> -- selecione -- </option>
+                <% userLevels.forEach(function(level){ %>
+                <option value="<%= level.ID_NIVEL %>"><%= level.NOME_NIVEL %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="inputStatusCreate">Status</label>
+              <select id="inputStatusCreate" name="STATUS_USUARIO" class="form-control">
+                <option value="Inativo"> -- selecione -- </option>
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="inputSenhaCreate">Senha</label>
+              <input type="password" class="form-control" id="inputSenhaCreate" name="SENHA_USUARIO">
             </div>
           </div>
           <div class="modal-footer">
@@ -136,7 +157,7 @@
     <div class="modal-dialog">
       <div class="modal-content" style="border-top: 3px solid #00c0ef;">
         <form method="post">
-          <input type="hidden" name="id">
+          <input type="hidden" name="ID_USUARIO">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -146,11 +167,28 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="inputNameUpdate">Nome</label>
-              <input type="text" class="form-control" id="inputNameUpdate" name="name">
+              <input type="text" class="form-control" id="inputNameUpdate" name="NOME_USUARIO">
             </div>
             <div class="form-group">
-              <label for="inputEmailUpdate">E-mail</label>
-              <input type="email" class="form-control" id="inputEmailUpdate" name="email">
+              <label for="inputLoginUpdate">Login</label>
+              <input type="text" class="form-control" id="inputLoginUpdate" name="LOGIN_USUARIO">
+            </div>
+            <div class="form-group">
+              <label for="inputNivelUpdate">Nível</label>
+              <select id="inputNivelUpdate" name="ID_NIVEL" class="form-control">
+                <option value=""> -- selecione -- </option>
+                <% userLevels.forEach(function(level){ %>
+                <option value="<%= level.ID_NIVEL %>"><%= level.NOME_NIVEL %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="inputStatusUpdate">Status</label>
+              <select id="inputStatusUpdate" name="STATUS_USUARIO" class="form-control">
+                <option value=""> -- selecione -- </option>
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+              </select>
             </div>
           </div>
           <div class="modal-footer">
@@ -170,26 +208,36 @@
   <script src="/js/form-save.js"></script>
 
   <script>
+
+    let userLevel = '<%= thisUserLevel %>';
       
     new HcodeGrid({
-      deleteUrl: '/admin/users/${data.id}',
-      deleteMessage: 'Deseja realmente excluir o usuário ${data.name}?',
+      deleteUrl: '/users/${data.ID_USUARIO}',
+      deleteMessage: 'Deseja realmente excluir o usuário "${data.NOME_USUARIO}" de login @${data.LOGIN_USUARIO}?',
       listeners:{
           buttonClick:(btn, data, e)=>{
             document.querySelector('#modal-update-password form [name=id]').value = data.ID_USUARIO;
             $('#modal-update-password').modal('show');
           }
-      }
+      },
+      userLevel
     });
 
-    document.querySelector('#modal-update-password form').save({
+    let formConfig = ({
         success:()=>{
             window.location.reload();
         },
-        failure:err=>{
+        failure:(err)=>{
             alert(err);
         }
     });
+
+
+    document.querySelector('#modal-create form').save(formConfig);
+
+    document.querySelector('#modal-update form').save(formConfig);
+
+    document.querySelector('#modal-update-password form').save(formConfig);
 
       
 

@@ -8,14 +8,13 @@ HTMLFormElement.prototype.save = function(config){
 
             e.preventDefault();
             let formData = new FormData(form);
-            console.log(formData);
     
             fetch(form.action, {
               method: form.method,
               body: formData
             }).then(response=>{
                 response.json().then(json=>{
-
+                    console.log(json);
                     if(json.error){
                         if(typeof config.failure === 'function') config.failure(json.error);
                     }

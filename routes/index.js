@@ -113,7 +113,8 @@ router.get('/comissoes', function(req, res, next) {
         end
       },
       data,
-      moment
+      moment,
+      thisUserLevel: req.session.user.NOME_NIVEL
     }));
 
   });
@@ -171,7 +172,6 @@ router.delete('/comissoes/:id', function(req, res, next){
 });
 
 router.get('/users', function(req, res, next){
-
   users.getUsers().then(results=>{
 
     let data = results[0];
@@ -179,12 +179,40 @@ router.get('/users', function(req, res, next){
 
     res.render('users', comissoes.getParams(req, {
       data,
+      thisUserLevel: req.session.user.NOME_NIVEL,
       userLevels,
       moment
     }));
 
   });
   
+});
+
+router.post('/users', function(req, res, next){
+
+  if(req.session.user.NIVEL_USUARIO === 'Administrador'){
+  
+    if(req.fields.SENHA_USUARIO) req.fields.SENHA_USUARIO = md5(req.fields.SENHA_USUARIO);
+
+    users.save(req.fields).then(results=>{
+
+      res.send(results);
+
+    }).catch(err=>{
+
+      res.send({
+        error: err
+      });
+      
+    });
+
+  }
+  else{
+    res.send({
+      error: 'Você não tem permissões suficientes para isso!'
+    });
+  }
+
 });
 
 router.post('/users/password-change', function(req, res, next){
@@ -202,6 +230,16 @@ router.post('/users/password-change', function(req, res, next){
           error: err
       });
       
+  });
+
+});
+
+router.delete('/users/:id', function(req, res, next){
+
+  users.delete(req.params.id).then(results=>{
+    res.send(results);
+  }).catch(err=>{
+    res.send(err);
   });
 
 });

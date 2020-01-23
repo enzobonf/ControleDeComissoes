@@ -144,7 +144,6 @@ module.exports = {
             //let date = fields.date.split('/');
         
             //fields.date = `${date[2]}-${date[1]}-${date[0]}`;*/
-            console.log(fields)
             let query, params = [
                 fields.ID_PEDIDO,
                 fields.VALOR_PEDIDO,
@@ -178,7 +177,6 @@ module.exports = {
             conn.query(query, params, (err, results)=>{
 
                 if(err){
-                    console.log(err);
                     reject(err);
                 }
                 else{
