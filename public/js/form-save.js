@@ -14,7 +14,6 @@ HTMLFormElement.prototype.save = function(config){
               body: formData
             }).then(response=>{
                 response.json().then(json=>{
-                    console.log(json);
                     if(json.error){
                         if(typeof config.failure === 'function') config.failure(json.error);
                     }
