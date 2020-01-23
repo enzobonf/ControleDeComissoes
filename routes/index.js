@@ -93,7 +93,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/send', function(req, res, next) {
   sendTask.sendDirectly().then(result=>{
-      console.log(req.query);
+
       if(req.query.noView === ''){
         res.send(result);
       }
