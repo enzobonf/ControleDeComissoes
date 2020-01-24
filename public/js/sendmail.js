@@ -4,7 +4,11 @@ function sendEmail(){
             method: 'GET',
         }).then(response=>{
             response.json().then(json=>{
-                alert(json.message + `\nHá R$ ${json.somaComissoes} em comissões atrasadas.`);
+                console.log(json);
+                let message = json.message;
+                if(json.somaComissoes) message = message + `\nHá R$ ${json.somaComissoes} em comissões atrasadas.`;
+
+                alert(message);
             })
         });
     }
