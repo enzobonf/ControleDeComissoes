@@ -114,6 +114,7 @@ module.exports = {
                     params.push(month);
 
                 }
+
             }
             
             var query = conn.query(`
@@ -133,7 +134,6 @@ module.exports = {
 
                     
                 });
-
 
         });   
     },
