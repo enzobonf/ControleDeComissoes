@@ -273,7 +273,46 @@
     <script src="/bower_components/chart.js/dist/Chart.min.js"></script>
     <script src="/js/hcode-grid.js"></script>
     <script src="/js/form-save.js"></script>
-    <script> 
+    <script>
+
+        let chartData = JSON.parse('<%- chartData %>');
+
+        let chart = new Chart(document.querySelector('#chart').getContext('2d'), {
+          type: 'line',
+          data:{
+            labels: chartData.months,
+            datasets: [{
+              data: chartData.values,
+              label: 'Comissões',
+              backgroundColor: 'rgb(54, 162, 235)',
+              borderColor: 'rgb(24, 132, 205)',
+              fill: true,
+              pointBackgroundColor: '#fffff'
+            }],
+          },
+          options:{
+            toolTips:{
+              mode: 'index',
+              intersect: false
+            },
+            scales:{
+              xAxes:[{
+                display: true,
+                scaleLabel:{
+                  display: true,
+                  labelString: 'Mês'
+                }
+              }],
+              yAxes:[{
+                display: true,
+                scaleLabel:{
+                  display: true,
+                  labelString: 'Comissões'
+                }
+              }]
+            }
+          }
+        });
 
         let forms = document.querySelectorAll('form');
         forms.forEach(form=>{
@@ -357,45 +396,6 @@
               }
           },
           userLevel
-        });
-
-        let chartData = JSON.parse('<%- chartData %>');
-
-        let chart = new Chart(document.querySelector('#chart').getContext('2d'), {
-          type: 'line',
-          data:{
-            labels: chartData.months,
-            datasets: [{
-              data: chartData.values,
-              label: 'Comissões',
-              backgroundColor: 'rgb(54, 162, 235)',
-              borderColor: 'rgb(24, 132, 205)',
-              fill: true,
-              pointBackgroundColor: '#fffff'
-            }],
-          },
-          options:{
-            toolTips:{
-              mode: 'index',
-              intersect: false
-            },
-            scales:{
-              xAxes:[{
-                display: true,
-                scaleLabel:{
-                  display: true,
-                  labelString: 'Mês'
-                }
-              }],
-              yAxes:[{
-                display: true,
-                scaleLabel:{
-                  display: true,
-                  labelString: 'Comissões'
-                }
-              }]
-            }
-          }
         });
 
         /* let request = '';
