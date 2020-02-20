@@ -16,10 +16,12 @@ class HcodeGrid{
                 window.location.reload();
             },
             afterFormCreateError:(e)=>{
-                console.error(err);
+                alert(e);
+                console.error(e);
             },
             afterFormUpdateError:(e)=>{
-                console.error(err);
+                alert(e);
+                console.error(e);
             },
         }, configs.listeners)
 
@@ -52,8 +54,8 @@ class HcodeGrid{
                 success:()=>{
                     this.fireEvent('afterFormCreate');
                 },
-                failure:()=>{
-                    this.fireEvent('afterFormCreateError')
+                failure:(e)=>{
+                    this.fireEvent('afterFormCreateError', e)
                 }
             });
 

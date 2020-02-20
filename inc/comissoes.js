@@ -123,7 +123,7 @@ module.exports = {
                 ${(year !== false) ? 'WHERE YEAR(DATA_RECEBIMENTO) = ?' : ''}
                 ${(month !== false) ? 'AND MONTH(DATA_RECEBIMENTO) = ? ' : ''}
                 ORDER BY DATA_RECEBIMENTO DESC
-                LIMIT ${limit}`, params,(err, results)=>{
+                LIMIT ${limit}`, params, (err, results)=>{
 
                     if(err){
                         reject(err);
@@ -237,7 +237,7 @@ module.exports = {
 
     },
 
-    chart(req){
+    chart(start, end){
 
         return new Promise((resolve, reject)=>{
 
@@ -251,8 +251,8 @@ module.exports = {
             GROUP BY YEAR(DATA_RECEBIMENTO), MONTH(DATA_RECEBIMENTO)
             ORDER BY YEAR(DATA_RECEBIMENTO) ASC, MONTH(DATA_RECEBIMENTO) ASC;
             `, [
-                req.query.start,
-                req.query.end
+                start,
+                end
             ], (err, results)=>{
 
                 if(err){

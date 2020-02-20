@@ -32,6 +32,22 @@ router.use(function(req, res, next){
 
 router.use(function(req, res, next){
 
+  if(req.session.user && (req.url).indexOf('/login') === -1 
+    && (req.method === 'POST' || req.method === 'DELETE') && req.session.user.NOME_NIVEL != 'Administrador'){
+    
+      res.send({
+        error: 'Você não tem permissão para isso!'
+      });
+
+  }
+  else{
+    next();
+  }
+
+});
+
+router.use(function(req, res, next){
+
   req.menus = comissoes.getMenus(req);
 
   next();
@@ -55,6 +71,7 @@ router.post('/login', function(req, res, next){
   else{
       users.login(req.body.user, md5(req.body.password)).then(user=>{
 
+          console.log(user);
           req.session.user = user;
 
           let url = '/';
@@ -109,9 +126,29 @@ router.get('/send', function(req, res, next) {
 router.get('/comissoes', function(req, res, next) {
 
   let start = (req.query.start) ? req.query.start : moment().subtract(2, 'year').format('YYYY-MM-DD');
+  let chartStart = (req.query.start) ? req.query.start : moment().subtract(4, 'year').format('YYYY-MM-DD');
+
   let end = (req.query.end) ? req.query.end : moment().format('YYYY-MM-DD');
+
+  comissoes.chart(chartStart, end).then(chartData=>{
+
+    comissoes.select(false, req).then(data=>{
+      res.render('comissoes', comissoes.getParams(req, {
+        date: {
+          start,
+          end
+        },
+        data,
+        moment,
+        thisUserLevel: req.session.user.NOME_NIVEL,
+        chartData: JSON.stringify(chartData)
+      }));
   
-  comissoes.select(false, req).then(data=>{
+    });
+
+  });
+  
+  /* comissoes.select(false, req).then(data=>{
     res.render('comissoes', comissoes.getParams(req, {
       date: {
         start,
@@ -122,7 +159,7 @@ router.get('/comissoes', function(req, res, next) {
       thisUserLevel: req.session.user.NOME_NIVEL
     }));
 
-  });
+  }); */
 
 });
 
@@ -135,16 +172,15 @@ router.post('/comissoes', function(req, res, next){
   }).catch(err=>{
       res.send(err);
   });
-  
 
 });
 
 router.get('/comissoes/chart', function(req, res, next){
 
-  req.query.start = (req.query.start) ? req.query.start : moment(new Date()).subtract(4, 'year').format('YYYY-MM-DD');
-  req.query.end = (req.query.end) ? req.query.end : moment(new Date()).format('YYYY-MM-DD');
+  let start = (req.query.start) ? req.query.start : moment(new Date()).subtract(4, 'year').format('YYYY-MM-DD');
+  let end = (req.query.end) ? req.query.end : moment(new Date()).format('YYYY-MM-DD');
 
-  comissoes.chart(req).then(chartData=>{
+  comissoes.chart(start, end).then(chartData=>{
 
       res.send(chartData);
 
@@ -208,7 +244,6 @@ router.post('/users', function(req, res, next){
     });
     
   });
-
 
 });
 

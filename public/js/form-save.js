@@ -22,7 +22,7 @@ HTMLFormElement.prototype.save = function(config){
                     }               
         
                 }).catch(err=>{
-                    if(typeof config.failure === 'function') config.failure(json);
+                    if(typeof config.failure === 'function') config.failure(err);
                 });
     
             });
