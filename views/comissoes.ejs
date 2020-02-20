@@ -275,12 +275,14 @@
     <script src="/js/form-save.js"></script>
     <script>
 
+        let chartData = JSON.parse('<%- chartData %>');
+
         let chart = new Chart(document.querySelector('#chart').getContext('2d'), {
           type: 'line',
           data:{
-            labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
+            labels: chartData.months,
             datasets: [{
-              data: [3, 5, 6, 2, 5, 2],
+              data: chartData.values,
               label: 'Comissões',
               backgroundColor: 'rgb(54, 162, 235)',
               borderColor: 'rgb(24, 132, 205)',
@@ -395,21 +397,6 @@
           },
           userLevel
         });
-
-        let chartData = JSON.parse('<%- chartData %>');
-        chart.data = {
-          labels: chartData.months,
-          datasets: [{
-            data: chartData.values,
-            label: 'Comissões',
-            backgroundColor: 'rgb(54, 162, 235)',
-            borderColor: 'rgb(24, 132, 205)',
-            fill: true,
-            pointBackgroundColor: '#fffff'
-          }]
-        }
-
-        chart.update();
 
         /* let request = '';
         (window.location.search) ? request = window.location.search : request = `?start=${moment().subtract(4, 'year').format('YYYY-MM-DD')}&end=${moment().format('YYYY-MM-DD')}`; */
