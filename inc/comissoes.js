@@ -1,5 +1,21 @@
 var conn = require('./db');
 var moment = require('moment');
+var Pagination = require('./pagination');
+
+const getSituationString = (situation) =>{
+
+    switch(situation){
+        case 'pagas':
+            return ['WHERE SITUACAO = 1', true];
+        case 'atrasadas':
+            return ['WHERE DATA_RECEBIMENTO < ? and SITUACAO = 0', true];
+        case 'emAberto':
+            return ['WHERE DATA_RECEBIMENTO >= ? and SITUACAO = 0', true];
+        default:
+            return ['', false];
+    }
+
+};
 
 module.exports = {
 
@@ -25,7 +41,29 @@ module.exports = {
                 text: 'Comissões',
                 href: '/comissoes',
                 icon: 'calendar-check-o',
-                active: false
+                active: false,
+                subMenus: [
+                    {
+                        text: 'Todas',
+                        href: '/comissoes',
+                        active: false
+                    },
+                    {
+                        text: 'Atrasadas',
+                        href: '/comissoes?sit=atrasadas',
+                        active: false
+                    },
+                    {
+                        text: 'Em aberto',
+                        href: '/comissoes?sit=emAberto',
+                        active: false
+                    },
+                    {
+                        text: 'Pagas',
+                        href: '/comissoes?sit=pagas',
+                        active: false
+                    }
+                ]
             },
             {
                 text: 'Usuários',
@@ -43,10 +81,26 @@ module.exports = {
         ]
 
         menus.map(menu=>{
+            /* if(!menu.subMenus){
+                if(menu.href === `${req.url.split('?')[0]}`) menu.active = true;
+            }
+            else{
+                
+                menu.subMenus.map(subMenu=>{
+                    if(subMenu.href === req.url) subMenu.active = true;
+                });
 
-            if(menu.href === `${req.url}`) menu.active = true;
+            } */
+            if(menu.href == `${req.url.split('?')[0]}`) menu.active = true;
+            if(menu.subMenus){
+                menu.subMenus.map(subMenu=>{
+                    if(subMenu.href === req.url) subMenu.active = true;
+                });
+            }
 
         });
+
+        console.log(menus);
 
         return menus;
 
@@ -81,7 +135,7 @@ module.exports = {
 
     },
 
-    select(late, req = ''){
+    /* select(late, req = ''){
 
         return new Promise((resolve, reject)=>{
 
@@ -96,6 +150,7 @@ module.exports = {
             if(late) params.push(dateNow);
 
             if(req !== ''){
+
                 if(req.query.limit) limit = req.query.limit;
                 if(req.query.year){ 
 
@@ -103,6 +158,7 @@ module.exports = {
                     params.push(year);
 
                 }
+
                 if(req.query.month){
 
                     if(!req.query.year){
@@ -136,6 +192,52 @@ module.exports = {
                 });
 
         });   
+    }, */
+
+    select(req){
+
+        return new Promise((resolve, reject)=>{
+
+            let dateNow = moment.parseZone().format("YYYY-MM-DD");
+
+            let page = req.query.page;
+            let dtStart = req.query.start;
+            let dtEnd = req.query.end;
+
+            if(!page) page = 1;
+
+            let params = [];
+
+            let useSituation = getSituationString(req.query.sit)[1];
+            let situationQuery = getSituationString(req.query.sit)[0];
+
+            if(useSituation && req.query.sit !== 'pagas'){
+                params.push(dateNow);
+            }
+
+            if(dtStart && dtEnd && !useSituation) params.push(dtStart, dtEnd);
+
+            let pag = new Pagination(
+                `SELECT SQL_CALC_FOUND_ROWS  * FROM Comissoes 
+                ${(useSituation) ? situationQuery : ''}
+                ${((dtStart && dtEnd) && !useSituation) ? 'WHERE DATA_RECEBIMENTO BETWEEN ? AND ?' : ''}
+                ORDER BY DATA_RECEBIMENTO DESC
+                LIMIT ?, ?`
+            , params);
+
+            pag.getPage(page).then(data=>{
+
+                resolve({
+                    data,
+                    links: pag.getNavigation(req.query)
+                });
+
+            }).catch(err=>{
+                reject(err);
+            });
+
+        });
+
     },
 
     save(fields){
@@ -242,14 +344,14 @@ module.exports = {
         return new Promise((resolve, reject)=>{
 
             conn.query(`
-            SELECT
-                CONCAT(YEAR(DATA_RECEBIMENTO), '-', MONTH(DATA_RECEBIMENTO)) AS date,
-                SUM(VALOR_COMISSAO) AS total
-                FROM Comissoes
-            WHERE
-                DATA_RECEBIMENTO BETWEEN ? AND ?
-            GROUP BY YEAR(DATA_RECEBIMENTO), MONTH(DATA_RECEBIMENTO)
-            ORDER BY YEAR(DATA_RECEBIMENTO) ASC, MONTH(DATA_RECEBIMENTO) ASC;
+                SELECT
+                    CONCAT(YEAR(DATA_RECEBIMENTO), '-', MONTH(DATA_RECEBIMENTO)) AS date,
+                    SUM(VALOR_COMISSAO) AS total
+                    FROM Comissoes
+                WHERE
+                    DATA_RECEBIMENTO BETWEEN ? AND ?
+                GROUP BY YEAR(DATA_RECEBIMENTO), MONTH(DATA_RECEBIMENTO)
+                ORDER BY YEAR(DATA_RECEBIMENTO) ASC, MONTH(DATA_RECEBIMENTO) ASC;
             `, [
                 start,
                 end

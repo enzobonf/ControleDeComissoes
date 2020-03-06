@@ -71,7 +71,6 @@ router.post('/login', function(req, res, next){
   else{
       users.login(req.body.user, md5(req.body.password)).then(user=>{
 
-          console.log(user);
           req.session.user = user;
 
           let url = '/';
@@ -132,7 +131,7 @@ router.get('/comissoes', function(req, res, next) {
 
   comissoes.chart(chartStart, end).then(chartData=>{
 
-    comissoes.select(false, req).then(data=>{
+    /* comissoes.select(false, req).then(data=>{
       res.render('comissoes', comissoes.getParams(req, {
         date: {
           start,
@@ -142,24 +141,23 @@ router.get('/comissoes', function(req, res, next) {
         moment,
         thisUserLevel: req.session.user.NOME_NIVEL,
         chartData: JSON.stringify(chartData)
-      }));
+      })); */
+
+      comissoes.select(req).then(pag=>{
+        res.render('comissoes', comissoes.getParams(req, {
+          date: {
+            start,
+            end
+          },
+          data: pag.data,
+          links: pag.links,
+          moment,
+          thisUserLevel: req.session.user.NOME_NIVEL,
+          chartData: JSON.stringify(chartData)
+        }));
+      });
   
     });
-
-  });
-  
-  /* comissoes.select(false, req).then(data=>{
-    res.render('comissoes', comissoes.getParams(req, {
-      date: {
-        start,
-        end
-      },
-      data,
-      moment,
-      thisUserLevel: req.session.user.NOME_NIVEL
-    }));
-
-  }); */
 
 });
 
@@ -278,6 +276,7 @@ router.delete('/users/:id', function(req, res, next){
 
 
 router.get('/list', function(req, res, next) {
+  //PARA FINS DE TESTE
   sendTask.listAll(req).then(result=>{ 
 
       res.send(getResponse(result));
@@ -285,6 +284,7 @@ router.get('/list', function(req, res, next) {
   }).catch(err=>{
       res.send(err);
   });
+
 });
 
 module.exports = router;

@@ -75,21 +75,28 @@ function getTr(results){
 function sendEmail(){
     return new Promise((resolve, reject)=>{
 
-        comissoes.select(true).then(results=>{
+        let req = {query: {sit: 'atrasadas'}};
+        console.log(req.query.sit);
 
-            if(results.length > 0){
+        comissoes.select(req).then(results=>{
 
-                let arrayTr = getTr(results);
+            console.log(results);
+
+            let numeroAtrasadas = results.data.length;
+
+            if(numeroAtrasadas > 0){
+
+                let arrayTr = getTr(results.data);
                 let somaComissoes = arrayTr.somaComissoes;
                 let tr = arrayTr.tr;
 
                 emailText = `Oi mãe, <br>
-                    Existem ${results.length} comissões atrasadas. <br>
+                    Existem ${numeroAtrasadas} comissões atrasadas. <br>
                     Somando um valor total de R$ ${somaComissoes}, <br>
                     Espero que me pague rápido kkkkkkk <p>        
                     (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
                 
-                emailer.sendEmail(`${results.length} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
+                emailer.sendEmail(`${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
                     resolve({
                         message: 'Email enviado com sucesso!',
                         table: tr,
@@ -143,15 +150,15 @@ module.exports = {
         
         return new Promise((resolve, reject)=>{
 
-            comissoes.select(false, req).then(results=>{
+            comissoes.select(req).then(results=>{
     
-                if(results.length > 0){
+                if(results.data.length > 0){
     
-                    let arrayTr = getTr(results);
+                    let arrayTr = getTr(results.data);
                     let somaComissoes = arrayTr.somaComissoes;
                     let tr = arrayTr.tr;             
                     resolve({
-                        message: `<h3 style="font-family:Calibri">Últimas ${results.length} comissões:</h3>`,
+                        message: `<h3 style="font-family:Calibri">Últimas ${results.data.length} comissões:</h3>`,
                         table: tr,
                         somaComissoes
                     });
