@@ -81,16 +81,7 @@ module.exports = {
         ]
 
         menus.map(menu=>{
-            /* if(!menu.subMenus){
-                if(menu.href === `${req.url.split('?')[0]}`) menu.active = true;
-            }
-            else{
-                
-                menu.subMenus.map(subMenu=>{
-                    if(subMenu.href === req.url) subMenu.active = true;
-                });
-
-            } */
+            
             if(menu.href == `${req.url.split('?')[0]}`) menu.active = true;
             if(menu.subMenus){
                 menu.subMenus.map(subMenu=>{
@@ -99,8 +90,6 @@ module.exports = {
             }
 
         });
-
-        console.log(menus);
 
         return menus;
 

@@ -95,13 +95,13 @@
           <li class="header">MENU</li>
           <!-- Optionally, you can add icons to the links -->
           <% menus.forEach(function(menu){ %>
-            <li <% if(menu.subMenus){ %> class="treeview" <% } %> <% if(menu.active){ %> class="active" <% } %>>
+            <li class="<% if(menu.subMenus){ %>treeview <% } %> <% if(menu.active){ %>active <% } %>">
               <a href="<%= menu.href %>" <% if (menu.onclick){ %> onclick="<%= menu.onclick %>" <% } %>>
                 <i class="fa fa-<%= menu.icon %>"></i>
                 <span><%= menu.text %></span>
               </a>
               <% if(menu.subMenus){ %>
-                <ul class="treeview-menu" style="display: none;">
+                <ul class="treeview-menu" <% if(!menu.active){%>style="display: none;"<%}%>>
                 <% menu.subMenus.forEach(subMenu=>{ %>
                   <li <% if(subMenu.active){%> class="active" <% } %>><a href="<%= subMenu.href %>"><i class="fa fa-circle-o"></i> <%= subMenu.text %></a></li>
                 <% }); %>
