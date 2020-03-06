@@ -13,6 +13,13 @@
 <script src="/js/sendmail.js"></script>
 <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script>
+
+  let subMenuActive = $(".treeview-menu  .active");
+  let menuToActive = subMenuActive.parent().show().parent();
+  menuToActive.addClass("active");
+
+</script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- PACE -->
@@ -38,14 +45,6 @@
       }
     })
   })
-</script>
-
-<script>
-
-  let subMenuActive = $(".treeview-menu  .active");
-  let menuToActive = subMenuActive.parent().show().parent();
-  menuToActive.addClass("active");
-
 </script>
 
 </body>
