@@ -1,0 +1,207 @@
+<%- include('inc/header') -%>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          Cadastro - OCR
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+          <li class="active">Cadastro - OCR</li>
+        </ol>
+      </section>
+
+      <!-- Main content -->
+      <section class="content container-fluid">
+
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Lista</h3>
+            <% if(thisUserLevel === 'Administrador') { %>
+              <a href="#" class="btn btn-xs pull-right btn-success" data-toggle="modal" data-target="#modal-create"><i
+                class="fa fa-plus"></i>
+              Novo</a>
+            <% } %>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Valor Comissão</th>
+                  <th>Recebimento</th>
+                  <th>Situação</th>
+                  <th style="min-width: 134px;">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% data.forEach(function(row){ %>
+                <tr <% if(row.SITUACAO_PEDIDO !== 'Pago'){%> style="color: red;" <% } %> data-row="<%= JSON.stringify(row); %>">
+                  <td><%= row.ID_PEDIDO %></td>
+                  <td>R$ <%= row.VALOR_COMISSAO %></td>
+                  <td><%= moment(row.DATA_RECEBIMENTO).parseZone().format("DD/MM/YYYY") %></td>
+                  <td><%= row.SITUACAO_PEDIDO %></td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-info btn-update">
+                      <i class="fa fa-pencil"></i> Editar
+                    </button>&nbsp;
+                    <% if(row.SITUACAO_PEDIDO === 'Pago'){%>
+                    <button type="button" class="btn btn-xs btn-success btn-cadastrar">
+                      <i class="fa fa-pencil"></i> Cadastrar
+                    </button>
+                    <% } %> 
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <!-- /.box-body -->
+        </div>
+
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div class="modal fade" id="modal-update">
+      <div class="modal-dialog">
+        <div class="modal-content" style="border-top: 3px solid #00c0ef;">
+          <form method="post" action="/comissoes">
+            <input type="hidden" name="ID_COMISSAO">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Editar Comissão</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="inputIdPedidoUpdate">Pedido</label>
+                <input type="text" class="form-control" id="inputIdPedidoUpdate" name="ID_PEDIDO">
+              </div>
+              <div class="form-group">
+                <label for="inputEmailUpdateUpdate">Valor Pedido</label>
+                <input type="number" step="0.010" class="form-control" id="inputValorPedidoUpdate" name="VALOR_PEDIDO">
+              </div>
+              <div class="form-group">
+                <label for="inputPorcentagemUpdate">Porcentagem (%)</label>
+                <input name="PORCENTAGEM" type="number" min="1" max="100" value="6" class="form-control" id="inputPorcentagemUpdate">
+              </div>
+              <div class="form-group">
+                <label for="inputValorComissaoUpdate">Valor Comissão</label>
+                <input type="number" step="0.010" class="form-control" id="inputValorComissaoUpdate" name="VALOR_COMISSAO">
+              </div>
+              <div class="form-group">
+                <label for="inputFormaPagamentoUpdate">Forma de Pagamento</label>
+                <select id="inputFormaPagamentoUpdate" name="FORMA_PAGAMENTO" class="form-control">
+                  <option value=""> -- selecione -- </option>
+                  <option value="PagSeguro">PagSeguro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="inputDataPedidoUpdate">Data Pedido</label>
+                <input type="date" id="inputDataPedidoUpdate" name="DATA_PEDIDO" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="inputPorcentagemUpdate">Prazo para liberação (dias)</label>
+                <input name="PRAZO" type="number" min="1" max="100" value="14" class="form-control" id="inputPrazoUpdate">
+              </div>
+              <div class="form-group">
+                <label for="inputDateUpdate">Data Recebimento</label>
+                <input type="date" id="inputDataRecebimentoUpdate" name="DATA_RECEBIMENTO" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="inputSituacaoUpdate">Situação Pdido</label>
+                <select id="inputSituacaoUpdate" name="SITUACAO_PEDIDO" class="form-control">
+                  <option value=""> -- selecione -- </option>
+                  <option value="Pago">Pago</option>
+                  <option value="0">Não pago</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="inputSituacaoUpdate">Situação Comissão</label>
+                <select id="inputSituacaoUpdate" name="SITUACAO" class="form-control">
+                  <option value=""> -- selecione -- </option>
+                  <option value="1">Paga</option>
+                  <option value="0">Em aberto</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-info">Salvar</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->\
+    </div>
+
+    <%- include('inc/footer') -%>
+
+    <script src="/js/moment.min.js"></script>
+    <script src="/js/hcode-grid.js"></script>
+    <script src="/js/form-save.js"></script>
+    <script src="/js/initInputComissoes.js"></script>
+    <script>
+
+        let formConfig = ({
+            success:()=>{
+                alert('Comissão cadastrada com sucesso!');
+            },
+            failure:(err)=>{
+                alert(err);
+            }
+        });
+
+        new HcodeGrid({
+          onUpdateLoad: (form, name, data)=>{            
+              let input = form.querySelector(`[name=${name}`);
+              switch(name){
+
+                case 'DATA_RECEBIMENTO':
+                  if(input){
+                    let date = moment.parseZone(data[name]).format("YYYY-MM-DD");
+                    input.value = date;
+                    form.querySelector(`[name=DATA_PEDIDO]`).value = moment(date).subtract(14, 'days').format("YYYY-MM-DD");
+                  }
+                break;
+
+                case 'VALOR_PEDIDO':
+                  if (input) input.value = parseFloat(data[name].replace(',', '.'));
+                break;
+
+                default:
+                  if (input) input.value = data[name];
+                break;
+                
+              }
+          },
+          listeners:{
+            buttonClick:(btn, data, e)=>{
+              if(confirm(`Deseja realmente cadastrar a comissão do pedido ${data.ID_PEDIDO}?`)){
+                let formData = new FormData();
+
+                for(var key in data){
+                    formData.append(key, data[key]);
+                }
+
+                fetch('/comissoes', {
+                  method: 'POST',
+                  body: formData
+                }).then(response=>response.json().then(json=>{
+                  if(json.error) return alert(json.error);
+                  return alert('Comissão cadastrada com sucesso!');
+                }));
+              }
+            }
+          },
+          userLevel
+        });
+   
+    </script>

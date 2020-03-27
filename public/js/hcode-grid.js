@@ -54,8 +54,8 @@ class HcodeGrid{
                 success:()=>{
                     this.fireEvent('afterFormCreate');
                 },
-                failure:(e)=>{
-                    this.fireEvent('afterFormCreateError', e)
+                failure:(err)=>{
+                    this.fireEvent('afterFormCreateError', [err])
                 }
             });
 
@@ -158,7 +158,6 @@ class HcodeGrid{
             [...row.querySelectorAll('.btn')].forEach(btn=>{
 
                 btn.addEventListener('click', e=>{
-
                     if(this.options.userLevel === 'Administrador'){
 
                         if(e.target.classList.contains(this.options.btnUpdate)){
@@ -177,7 +176,7 @@ class HcodeGrid{
 
                         }
                         else{
-
+  
                             this.fireEvent('buttonClick', [e.target, this.getTrData(e), e]);
 
                         }

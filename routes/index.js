@@ -5,6 +5,9 @@ var users = require('./../inc/users')
 var sendTask = require('./../inc/sendTask');
 var md5 = require('md5');
 var moment = require('moment');
+var fromImage = require('./../inc/fromImage');
+
+const fs = require('fs');
 
 moment.locale('pt-BR');
 
@@ -131,18 +134,6 @@ router.get('/comissoes', function(req, res, next) {
 
   comissoes.chart(chartStart, end).then(chartData=>{
 
-    /* comissoes.select(false, req).then(data=>{
-      res.render('comissoes', comissoes.getParams(req, {
-        date: {
-          start,
-          end
-        },
-        data,
-        moment,
-        thisUserLevel: req.session.user.NOME_NIVEL,
-        chartData: JSON.stringify(chartData)
-      })); */
-
       comissoes.select(req).then(pag=>{
         res.render('comissoes', comissoes.getParams(req, {
           date: {
@@ -152,7 +143,6 @@ router.get('/comissoes', function(req, res, next) {
           data: pag.data,
           links: pag.links,
           moment,
-          thisUserLevel: req.session.user.NOME_NIVEL,
           chartData: JSON.stringify(chartData)
         }));
       });
@@ -163,12 +153,21 @@ router.get('/comissoes', function(req, res, next) {
 
 router.post('/comissoes', function(req, res, next){
 
-  comissoes.save(req.body).then(results=>{
+  comissoes.pesquisaPedido(req.body.ID_PEDIDO).then(result=>{
 
-      res.send(results);
+      if(result.length > 0 && (!req.body.ID_COMISSAO || req.body.ID_COMISSAO != result[0].ID_COMISSAO)){
+        res.send({error: 'Esse pedido já está cadastrado!'});
+      }
+      else{
+        comissoes.save(req.body).then(results=>{
 
-  }).catch(err=>{
-      res.send(err);
+          res.send(results);
+    
+        }).catch(err=>{
+            res.send({error: err});
+        });
+      }
+
   });
 
 });
@@ -210,6 +209,40 @@ router.delete('/comissoes/:id', function(req, res, next){
 
 });
 
+router.post('/cadastroOCR', function(req, res, next){
+  
+  if(req.files){
+
+    fromImage.doOCR(req.files.file.path).then(result=>{
+      req.session.fromOCR = result;
+      /* fs.unlink(req.files.file.path, (err) => {
+        if(err){
+          console.error(err);
+        }
+      }); */
+      res.send({redirect: '/cadastroOCR'});
+    });
+  }
+  else{
+    res.send({error:'Houve erro no upload!'});
+  }
+
+});
+
+router.get('/cadastroOCR', function(req, res, next) {
+
+  if(req.session.fromOCR){
+    res.render('comissoesFromOCR', comissoes.getParams(req, {
+      data: req.session.fromOCR,
+      moment
+    }));
+  }
+  else{
+    res.redirect('/comissoes');
+  }
+
+});
+
 router.get('/users', function(req, res, next){
   users.getUsers().then(results=>{
 
@@ -218,7 +251,6 @@ router.get('/users', function(req, res, next){
 
     res.render('users', comissoes.getParams(req, {
       data,
-      thisUserLevel: req.session.user.NOME_NIVEL,
       userLevels,
       moment
     }));

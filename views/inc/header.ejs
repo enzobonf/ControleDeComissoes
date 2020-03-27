@@ -103,13 +103,14 @@
               <% if(menu.subMenus){ %>
                 <ul class="treeview-menu" <% if(!menu.active){%>style="display: none;"<%}%>>
                 <% menu.subMenus.forEach(subMenu=>{ %>
-                  <li <% if(subMenu.active){%> class="active" <% } %>><a href="<%= subMenu.href %>"><i class="fa fa-circle-o"></i> <%= subMenu.text %></a></li>
+                  <li <% if(subMenu.active){%> class="active" <% } %>><a <% if (subMenu.onclick){ %> onclick="<%= subMenu.onclick %>" href="#" % <% }else{ %>  href="<%= subMenu.href %>" <% } %>><i class="fa fa-circle-o"></i> <%= subMenu.text %></a></li>
                 <% }); %>
               </ul>
               <% } %>
             </li>
           <% }); %>
         </ul>
+        <input name='image' type="file" id="files" style="display:none;">
         <!-- /.sidebar-menu -->
       </section>
       <!-- /.sidebar -->

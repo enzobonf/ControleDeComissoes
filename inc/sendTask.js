@@ -76,11 +76,8 @@ function sendEmail(){
     return new Promise((resolve, reject)=>{
 
         let req = {query: {sit: 'atrasadas'}};
-        console.log(req.query.sit);
 
         comissoes.select(req).then(results=>{
-
-            console.log(results);
 
             let numeroAtrasadas = results.data.length;
 

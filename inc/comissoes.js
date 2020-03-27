@@ -23,7 +23,8 @@ module.exports = {
 
         return Object.assign({},{
             menus: req.menus, 
-            user: req.session.user
+            user: req.session.user,
+            thisUserLevel: req.session.user.NOME_NIVEL
         }, params);
 
     },
@@ -62,6 +63,12 @@ module.exports = {
                         text: 'Pagas',
                         href: '/comissoes?sit=pagas',
                         active: false
+                    },
+                    {
+                        text: 'Cadastrar com imagem',
+                        href: '/cadastroOCR',
+                        onclick: 'selectImageOCR(this)',
+                        active: false
                     }
                 ]
             },
@@ -85,7 +92,10 @@ module.exports = {
             if(menu.href == `${req.url.split('?')[0]}`) menu.active = true;
             if(menu.subMenus){
                 menu.subMenus.map(subMenu=>{
-                    if(subMenu.href === req.url) subMenu.active = true;
+                    if(subMenu.href === req.url) {
+                        subMenu.active = true;
+                        menu.active = true;
+                    }
                 });
             }
 
@@ -223,6 +233,26 @@ module.exports = {
 
             }).catch(err=>{
                 reject(err);
+            });
+
+        });
+
+    },
+
+    pesquisaPedido(pedido){
+
+        return new Promise((resolve, reject)=>{
+
+            conn.query(`SELECT * FROM Comissoes WHERE ID_PEDIDO = ?
+            `, pedido, (err, results)=>{
+
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results);
+                }
+
             });
 
         });
