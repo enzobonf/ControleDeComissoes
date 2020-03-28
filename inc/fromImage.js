@@ -91,10 +91,10 @@ module.exports = {
 
       let file = path[path.length - 1];
 
-
         return new Promise((resolve, reject)=>{
           
           tesseract.recognize(`./upload/${file}`, config).then(text=>{
+
             text = text.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '');
             let arrayPedidos = text.split('\n');
         
@@ -126,9 +126,8 @@ module.exports = {
             resolve(pedidosJSON);
 
             fs.unlink(filename, (err) => {
-              if(err){
-                console.error(err);
-              }
+                if(err){
+                  console.error(err);
                 }
             });
 
