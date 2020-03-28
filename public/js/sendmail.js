@@ -36,11 +36,13 @@ function uploadTask(files){
         })).catch(err=>{
             alert('Ocorreu um erro!');
         });
+
+        alert('Aguarde\nEnviando arquivo para o servidor!');
     });
 
 }
 
-function selectImageOCR(button){
+function selectImageOCR(){
 
     (userLevel === 'Administrador') ? this.inputFiles.click() : alert('Você não tem permissão para isso!');
 
