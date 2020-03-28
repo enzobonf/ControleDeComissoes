@@ -213,15 +213,28 @@ router.post('/cadastroOCR', function(req, res, next){
   
   if(req.files){
 
-    fromImage.doOCR(req.files.file.path).then(result=>{
-      req.session.fromOCR = result;
-      /* fs.unlink(req.files.file.path, (err) => {
+    let file = req.files.file.path;
+    let fileType = req.files.file.type.substring(0,5);
+
+    if(fileType == 'image'){
+      fromImage.doOCR(file).then(result=>{
+
+        req.session.fromOCR = result;
+        res.send({redirect: '/cadastroOCR'});
+  
+      }).catch(err=>{
+        res.send({error:'Houve erro na leitura da imagem!'});
+      });
+    }
+    else{
+      res.send({error: 'Envie um arquivo de IMAGEM!'});
+      fs.unlink(file, (err) => {
         if(err){
           console.error(err);
         }
-      }); */
-      res.send({redirect: '/cadastroOCR'});
-    });
+      });
+    }
+    
   }
   else{
     res.send({error:'Houve erro no upload!'});

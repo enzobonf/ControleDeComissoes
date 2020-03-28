@@ -32,7 +32,7 @@ function uploadTask(files){
             method: 'POST',
             body: formData
         }).then(response=>response.json().then(json=>{
-            (json.redirect) ? window.location.href = json.redirect : alert('Ocorreu um erro!');
+            (json.redirect) ? window.location.href = json.redirect : alert(json.error);
         })).catch(err=>{
             alert('Ocorreu um erro!');
         });

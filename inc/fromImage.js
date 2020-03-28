@@ -129,11 +129,16 @@ module.exports = {
               if(err){
                 console.error(err);
               }
+                }
             });
+
         
           }).catch(err=>{
+
               reject(err);
+
           });
+
       
         });
       
