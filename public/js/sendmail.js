@@ -2,7 +2,11 @@ this.inputFiles = document.querySelector('#files');
 
 this.inputFiles.addEventListener('change', event=>{
     uploadTask(event.target.files).then(response=>{
-        console.log(response);
+        (response.redirect) ? window.location.href = response.redirect : alert(response.error);
+    }).catch(err=>{
+        console.log(err);
+        alert('Ocorreu um erro!');
+        this.inputFiles.value = '';
     });
 });
 
@@ -32,12 +36,11 @@ function uploadTask(files){
             method: 'POST',
             body: formData
         }).then(response=>response.json().then(json=>{
-            (json.redirect) ? window.location.href = json.redirect : alert(json.error);
+            resolve(json);
         })).catch(err=>{
-            alert('Ocorreu um erro!');
+            reject(err);
         });
 
-        alert('Aguarde\nEnviando arquivo para o servidor!');
     });
 
 }
