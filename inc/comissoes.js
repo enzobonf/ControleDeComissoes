@@ -46,27 +46,32 @@ module.exports = {
                     {
                         text: 'Todas',
                         href: '/comissoes',
+                        icon: 'circle',
                         active: false
                     },
                     {
                         text: 'Atrasadas',
                         href: '/comissoes?sit=atrasadas',
+                        icon: 'circle',
                         active: false
                     },
                     {
                         text: 'Em aberto',
                         href: '/comissoes?sit=emAberto',
+                        icon: 'circle',
                         active: false
                     },
                     {
                         text: 'Pagas',
                         href: '/comissoes?sit=pagas',
+                        icon: 'circle',
                         active: false
                     },
                     {
                         text: 'Cadastrar com imagem',
                         href: '/cadastroOCR',
                         onclick: 'selectImageOCR()',
+                        icon: 'plus',
                         active: false
                     }
                 ]
