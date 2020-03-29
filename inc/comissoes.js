@@ -23,8 +23,7 @@ module.exports = {
 
         return Object.assign({},{
             menus: req.menus, 
-            user: req.session.user,
-            thisUserLevel: req.session.user.NOME_NIVEL
+            user: req.session.user
         }, params);
 
     },

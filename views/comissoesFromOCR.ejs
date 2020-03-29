@@ -19,11 +19,6 @@
         <div class="box">
           <div class="box-header">
             <h3 class="box-title">Lista - <%= data.length %> Pedidos</h3>
-            <% if(thisUserLevel === 'Administrador') { %>
-              <a href="#" class="btn btn-xs pull-right btn-success" data-toggle="modal" data-target="#modal-create"><i
-                class="fa fa-plus"></i>
-              Novo</a>
-            <% } %>
           </div>
           <!-- /.box-header -->
           <div class="box-body table-responsive no-padding">
@@ -31,9 +26,10 @@
               <thead>
                 <tr>
                   <th>Pedido</th>
+                  <th>Valor Pedido</th>
                   <th>Valor Comissão</th>
                   <th>Recebimento</th>
-                  <th>Situação</th>
+                  <th>Situação Pedido</th>
                   <th style="min-width: 134px;">Ações</th>
                 </tr>
               </thead>
@@ -41,6 +37,7 @@
                 <% data.forEach(function(row){ %>
                 <tr <% if(row.SITUACAO_PEDIDO !== 'Pago'){%> style="color: red;" <% } %> data-row="<%= JSON.stringify(row); %>">
                   <td><%= row.ID_PEDIDO %></td>
+                  <td>R$ <%= row.VALOR_PEDIDO %></td>
                   <td>R$ <%= row.VALOR_COMISSAO %></td>
                   <td><%= moment(row.DATA_RECEBIMENTO).parseZone().format("DD/MM/YYYY") %></td>
                   <td><%= row.SITUACAO_PEDIDO %></td>
@@ -115,7 +112,7 @@
                 <input type="date" id="inputDataRecebimentoUpdate" name="DATA_RECEBIMENTO" class="form-control">
               </div>
               <div class="form-group">
-                <label for="inputSituacaoUpdate">Situação Pdido</label>
+                <label for="inputSituacaoUpdate">Situação Pedido</label>
                 <select id="inputSituacaoUpdate" name="SITUACAO_PEDIDO" class="form-control">
                   <option value=""> -- selecione -- </option>
                   <option value="Pago">Pago</option>
@@ -199,6 +196,10 @@
                   return alert('Comissão cadastrada com sucesso!');
                 }));
               }
+            },
+            afterFormUpdate:(e)=>{
+                alert('Comissão cadastrada com sucesso!');
+                $('#modal-update').modal('hide');
             }
           },
           userLevel

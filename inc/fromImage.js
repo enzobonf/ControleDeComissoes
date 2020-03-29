@@ -9,64 +9,19 @@ const config = {
     psm: 3,
 }
   
-  const getTr = (results) => {
-      
-    let somaComissoes = 0;
-    let tr = `<html>
-                <body>
-                    <p>
-                    <table style='border-radius: 5px; font-family: Calibri;' border='1' cellpadding='0' cellspacing='0'>
-                        <thead>
-                        <tr>
-                            <th align='center' valign='middle'>Pedido</th>
-                            <th align='center' valign='middle'>Valor Pedido</th>
-                            <th align='center' valign='middle'>Valor Comissão</th>
-                            <th align='center' valign='middle'>Data Recebimento</th>
-                            <th align='center' valign='middle'>Situação Pedido</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
-  
-    results.forEach(result=>{
-        tr = tr + (`
-            <tr>
-                <td align='center' valign='middle'>${result.ID_PEDIDO}</td>
-                <td align='center' valign='middle'>${result.VALOR_PEDIDO}</td>
-                <td align='center' valign='middle'>${result.VALOR_COMISSAO}</td>
-                <td align='center' valign='middle'>${moment.parseZone(result.DATA_RECEBIMENTO).format("DD/MM/YYYY")}</td>
-                <td align='center' valign='middle'>${result.SITUACAO}</td>
-            </tr>
-        `);
-        somaComissoes = somaComissoes + parseFloat(result.VALOR_COMISSAO);
-    });
-  
-    tr = tr + `</tbody>
-            </table>
-        </body>
-    </html>`;
-  
-    somaComissoes = somaComissoes.toFixed(2);
-    
-    return ({
-        tr,
-        somaComissoes
-    });
-  
-  }
-  
-  const formatDates = (dataPedido) => {
-  
-      let array = dataPedido.split('/');
-      array[2] = '20' + array[2];
-      dataPedido = moment(`${array[2]}-${array[1]}-${array[0]}`)
-      dataRecebimento = moment(dataPedido).add(14, 'days');
-  
-      let datas = {
-        dataPedido: moment(dataPedido).format('YYYY-MM-DD'),
-        dataRecebimento: moment(dataRecebimento).format('YYYY-MM-DD')
-      };
-  
-      return datas;
+const formatDates = (dataPedido) => {
+
+    let array = dataPedido.split('/');
+    array[2] = '20' + array[2];
+    dataPedido = moment(`${array[2]}-${array[1]}-${array[0]}`)
+    dataRecebimento = moment(dataPedido).add(14, 'days');
+
+    let datas = {
+      dataPedido: moment(dataPedido).format('YYYY-MM-DD'),
+      dataRecebimento: moment(dataRecebimento).format('YYYY-MM-DD')
+    };
+
+    return datas;
   
 };
 
@@ -120,8 +75,6 @@ module.exports = {
             stringJSON = stringJSON.replace('undefined', '');
         
             let pedidosJSON = JSON.parse(stringJSON);
-        
-            //let arrayTr = getTr(pedidosJSON);
             
             resolve(pedidosJSON);
 

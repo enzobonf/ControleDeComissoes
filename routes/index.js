@@ -245,6 +245,7 @@ router.post('/cadastroOCR', function(req, res, next){
 router.get('/cadastroOCR', function(req, res, next) {
 
   if(req.session.fromOCR){
+    console.log(req.session.fromOCR);
     res.render('comissoesFromOCR', comissoes.getParams(req, {
       data: req.session.fromOCR,
       moment
