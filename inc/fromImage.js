@@ -73,21 +73,20 @@ module.exports = {
         
             stringJSON += ']';
             stringJSON = stringJSON.replace('undefined', '');
-        
-            let pedidosJSON = JSON.parse(stringJSON);
             
-            resolve(pedidosJSON);
+            resolve(JSON.parse(stringJSON));
 
-            fs.unlink(filename, (err) => {
-                if(err){
-                  console.error(err);
-                }
-            });
-
-        
           }).catch(err=>{
 
               reject(err);
+
+          }).finally(()=>{
+
+              fs.unlink(filename, (err) => {
+                if(err){
+                  console.error(err);
+                }
+              });
 
           });
 
