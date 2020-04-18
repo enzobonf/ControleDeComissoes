@@ -14,7 +14,7 @@ module.exports = {
         });
 
         const mailOptions = {
-            from: 'Enzo',
+            from: 'Enzo <enzobonfx@gmail.com>',
             to,
             subject,
             html: text + '<p>' + html
