@@ -209,13 +209,13 @@ router.delete('/comissoes/:id', function(req, res, next){
 
 });
 
-router.post('/cadastroOCR', function(req, res, next){
+router.post('/cadastroArquivo', function(req, res, next){
   
   if(req.files){
 
     let file = req.files.file.path;
-    let fileType = req.files.file.type.substring(0,5);
-
+    
+    /* let fileType = req.files.file.type.substring(0,5);
     if(fileType == 'image'){
       fromImage.doOCR(file).then(result=>{
 
@@ -233,6 +233,28 @@ router.post('/cadastroOCR', function(req, res, next){
           console.error(err);
         }
       });
+    } */
+
+    let fileType = req.files.file.type;
+    if(fileType == 'text/html'){
+      
+      fromImage.parseHTML(file).then(result=>{
+
+        req.session.fromFile = result;
+        res.send({redirect: '/cadastroArquivo'});
+
+      }).catch(err=>{
+        res.send({error:'Houve erro na leitura do arquivo.\nEnvie um arquivo válido'});
+      });
+
+    }
+    else{
+      res.send({error: 'Envie um arquivo HTML!'});
+      fs.unlink(file, (err) => {
+        if(err){
+          console.error(err);
+        }
+      });
     }
     
   }
@@ -242,11 +264,11 @@ router.post('/cadastroOCR', function(req, res, next){
 
 });
 
-router.get('/cadastroOCR', function(req, res, next) {
+router.get('/cadastroArquivo', function(req, res, next) {
 
-  if(req.session.fromOCR){
-    res.render('comissoesFromOCR', comissoes.getParams(req, {
-      data: req.session.fromOCR,
+  if(req.session.fromFile){
+    res.render('comissoesFromFile', comissoes.getParams(req, {
+      data: req.session.fromFile,
       moment
     }));
   }

@@ -68,8 +68,8 @@ module.exports = {
                         active: false
                     },
                     {
-                        text: 'Cadastrar com imagem',
-                        href: '/cadastroOCR',
+                        text: 'Cadastrar com Arquivo',
+                        href: '/cadastroArquivo',
                         onclick: 'selectImageOCR()',
                         icon: 'plus',
                         active: false

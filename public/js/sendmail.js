@@ -32,7 +32,7 @@ function uploadTask(files){
         let formData = new FormData();
         formData.append('file', files[0]);
 
-        fetch('/cadastroOCR', {
+        fetch('/cadastroArquivo', {
             method: 'POST',
             body: formData
         }).then(response=>response.json().then(json=>{

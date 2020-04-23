@@ -1,7 +1,11 @@
-var tesseract = require('node-tesseract-ocr');
-var moment = require('moment');
-var isWin = process.platform === "win32";
-var fs = require('fs');
+const tesseract = require('node-tesseract-ocr');
+const moment = require('moment');
+const isWin = process.platform === "win32";
+const fs = require('fs');
+
+const cheerio = require('cheerio');
+
+let porcentagem = 6;
 
 const config = {
     lang: "por",
@@ -26,15 +30,15 @@ const formatDates = (dataPedido) => {
 };
 
 const formatarSituacao = situacao => {
-  if(situacao.indexOf('Enviado') != -1) return 'Pago';
-  if(situacao.indexOf('Cancelado') != -1) return 'Cancelado';
-  if(situacao.indexOf('Entregue') != -1) return 'Pago';
-  if(situacao.indexOf('devolvi') != -1) return 'Pagamento devolvido';
-  if(situacao.indexOf('Pago') != -1) return 'Pago';
-  if(situacao.indexOf('emseparaç') != -1) return 'Pago';
-  if(situacao.indexOf('Efetuado') != -1) return 'Efetuado';
-  if(situacao.indexOf('Aguardandopaga') != -1) return 'Aguardando pagamento';
-  return '?';
+  if(situacao.indexOf('Enviado') != -1) return true;
+  if(situacao.indexOf('Cancelado') != -1) return false;
+  if(situacao.indexOf('Entregue') != -1) return true;
+  if(situacao.indexOf('Devolvido') != -1) return false;
+  if(situacao.indexOf('Pago') != -1) return true;
+  if(situacao.indexOf('em separação') != -1) return true;
+  if(situacao.indexOf('Efetuado') != -1) return false;
+  if(situacao.indexOf('Aguardando pagamnto') != -1) return false;
+  return false;
 }
 
 module.exports = {
@@ -55,8 +59,6 @@ module.exports = {
         
             let qntPedidos = arrayPedidos.length / 6;
             let stringJSON = '['
-        
-            let porcentagem = 6;
         
             for(let i = 0; i < qntPedidos; i++){
         
@@ -93,6 +95,65 @@ module.exports = {
       
         });
       
+      },
+
+      parseHTML(filename){
+        
+        return new Promise((resolve, reject)=>{
+
+          try{
+
+            let separator = (isWin) ? '\\' : '/';
+            let path = filename.split(separator);
+
+            let file = path[path.length - 1];
+            console.log(file);
+
+            var $ = cheerio.load(fs.readFileSync(`./upload/${file}`));
+
+            let pedidos = []
+            
+            let tablePedidos = $('#mainContent > div:nth-child(3) > div:nth-child(3) > div.box-content.table-content > table > tbody > tr');
+
+            for(i=0; i < 38; i++){
+
+              let ID_PEDIDO = $(tablePedidos[i]).find('td.pedido-numero.footable-visible > a').text();
+
+              let SITUACAO_PEDIDO = $(tablePedidos[i]).find(`#situacao_id_${ID_PEDIDO}_chosen > a > span`).text();
+              if(SITUACAO_PEDIDO.indexOf('Pedido') !== -1) SITUACAO_PEDIDO = SITUACAO_PEDIDO.replace('Pedido ', '');
+
+              let DATA_RECEBIMENTO = formatDates($(tablePedidos[i]).find(' td.data.footable-visible > span > span.text-muted').text()).dataRecebimento;
+
+              let VALOR_PEDIDO = $(tablePedidos[i]).find('td.text-success.button-container.footable-visible > strong').text().match(/[0-9]{0,10}[,]{1,1}[0-9]{0,4}/, '').toString().replace(',', '.');
+              let VALOR_COMISSAO = (VALOR_PEDIDO * (porcentagem / 100)).toFixed(2);
+
+              let FORMA_PAGAMENTO = $(tablePedidos[i]).find('td:nth-child(6) > img').attr('title');
+
+              let ESTA_PAGO = formatarSituacao(SITUACAO_PEDIDO);
+
+              pedidos.push({ID_PEDIDO, SITUACAO_PEDIDO, SITUACAO: 0,  DATA_RECEBIMENTO, VALOR_PEDIDO, VALOR_COMISSAO, FORMA_PAGAMENTO, ESTA_PAGO});
+
+            }
+
+            resolve(pedidos);
+
+          }
+          catch(err){
+            reject(err)
+          }
+          finally{
+
+            fs.unlink(filename, (err) => {
+              if(err){
+                console.error(err);
+              }
+            });
+
+          }
+
+        });
+
+
       }
 
 };
