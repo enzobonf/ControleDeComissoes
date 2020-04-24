@@ -1,14 +1,18 @@
-var createError = require('http-errors');
-var express = require('express');
-var formidable = require('formidable');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var redis   = require("redis");
-var session = require('express-session');
-var RedisStore = require('connect-redis')(session);
-var client = redis.createClient();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const redis   = require("redis");
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const client = redis.createClient();
 
+const multer = require('multer');
+var storage = multer.memoryStorage();
+var upload = multer({storage});
+
+const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 
@@ -16,11 +20,16 @@ var sendTask = require('./inc/sendTask');
 sendTask.executeTask();
 
 var app = express();
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
-app.use(function(req, res, next){
+app.use(upload.any());
+
+/*app.use(function(req, res, next){
 
   if(req.method === 'POST'){
 
+    next();
     var form = formidable.IncomingForm({
       uploadDir: path.join(__dirname, "/upload"),
       keepExtensions: true
@@ -41,7 +50,7 @@ app.use(function(req, res, next){
     next();
   }
 
-});
+});*/
 
 
 // view engine setup

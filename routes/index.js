@@ -213,7 +213,7 @@ router.post('/cadastroArquivo', function(req, res, next){
   
   if(req.files){
 
-    let file = req.files.file.path;
+    let file = req.files[0].buffer;
     
     /* let fileType = req.files.file.type.substring(0,5);
     if(fileType == 'image'){
@@ -235,7 +235,7 @@ router.post('/cadastroArquivo', function(req, res, next){
       });
     } */
 
-    let fileType = req.files.file.type;
+    let fileType = req.files[0].mimetype;
     if(fileType == 'text/html'){
       
       fromFile.parseHTML(file).then(result=>{
@@ -250,11 +250,11 @@ router.post('/cadastroArquivo', function(req, res, next){
     }
     else{
       res.send({error: 'Envie um arquivo HTML!'});
-      fs.unlink(file, (err) => {
+      /* fs.unlink(file, (err) => {
         if(err){
           console.error(err);
         }
-      });
+      }); */
     }
     
   }
@@ -296,9 +296,9 @@ router.get('/users', function(req, res, next){
 
 router.post('/users', function(req, res, next){
 
-  if(req.fields.SENHA_USUARIO) req.fields.SENHA_USUARIO = md5(req.fields.SENHA_USUARIO);
+  if(req.body.SENHA_USUARIO) req.body.SENHA_USUARIO = md5(req.body.SENHA_USUARIO);
 
-  users.save(req.fields).then(results=>{
+  users.save(req.body).then(results=>{
 
     res.send(results);
 
@@ -314,8 +314,8 @@ router.post('/users', function(req, res, next){
 
 router.post('/users/password-change', function(req, res, next){
 
-  if(req.fields.password) req.fields.password = md5(req.fields.password);
-  if(req.fields.passwordConfirm) req.fields.passwordConfirm = md5(req.fields.passwordConfirm);
+  if(req.body.password) req.body.password = md5(req.body.password);
+  if(req.body.passwordConfirm) req.body.passwordConfirm = md5(req.body.passwordConfirm);
 
   users.changePassword(req).then(results=>{
 

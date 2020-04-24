@@ -1,4 +1,4 @@
-const tesseract = require('node-tesseract-ocr');
+//const tesseract = require('node-tesseract-ocr');
 const moment = require('moment');
 const isWin = process.platform === "win32";
 const fs = require('fs');
@@ -60,7 +60,7 @@ module.exports = {
             let qntPedidos = arrayPedidos.length / 6;
             let stringJSON = '['
         
-            for(let i = 0; i < qntPedidos; i++){
+            for(let i = 20; i < qntPedidos; i++){
         
               let datas = formatDates(arrayPedidos[i + (qntPedidos * 2)].substring(0, 8));
               let situacao = formatarSituacao(arrayPedidos[i + qntPedidos].replace(/[\d-]/, '').replace(/[^0-9a-zA-Z]+/, '').replace('O', '').replace(/ /g, ''));
@@ -97,25 +97,25 @@ module.exports = {
       
       },
 
-      parseHTML(filename){
+      parseHTML(file){
         
         return new Promise((resolve, reject)=>{
 
           try{
 
-            let separator = (isWin) ? '\\' : '/';
+            /* let separator = (isWin) ? '\\' : '/';
             let path = filename.split(separator);
 
             let file = path[path.length - 1];
-            console.log(file);
+            console.log(file); */
 
-            var $ = cheerio.load(fs.readFileSync(`./upload/${file}`));
+            var $ = cheerio.load(file);
 
             let pedidos = []
             
             let tablePedidos = $('#mainContent > div:nth-child(3) > div:nth-child(3) > div.box-content.table-content > table > tbody > tr');
 
-            for(i = 0; i < 20; i++){
+            for(i = 0; i < 100; i++){
 
               let ID_PEDIDO = $(tablePedidos[i]).find('td.pedido-numero.footable-visible > a').text();
 
@@ -143,11 +143,11 @@ module.exports = {
           }
           finally{
 
-            fs.unlink(filename, (err) => {
+            /* fs.unlink(filename, (err) => {
               if(err){
                 console.error(err);
               }
-            });
+            }); */
 
           }
 
