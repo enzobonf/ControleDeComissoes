@@ -115,7 +115,7 @@ module.exports = {
             
             let tablePedidos = $('#mainContent > div:nth-child(3) > div:nth-child(3) > div.box-content.table-content > table > tbody > tr');
 
-            for(i=0; i < 20; i++){
+            for(i = 0; i < 20; i++){
 
               let ID_PEDIDO = $(tablePedidos[i]).find('td.pedido-numero.footable-visible > a').text();
 

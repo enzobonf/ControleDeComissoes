@@ -5,7 +5,7 @@ var users = require('./../inc/users')
 var sendTask = require('./../inc/sendTask');
 var md5 = require('md5');
 var moment = require('moment');
-var fromImage = require('./../inc/fromImage');
+var fromFile = require('../inc/fromFile');
 
 const fs = require('fs');
 
@@ -238,7 +238,7 @@ router.post('/cadastroArquivo', function(req, res, next){
     let fileType = req.files.file.type;
     if(fileType == 'text/html'){
       
-      fromImage.parseHTML(file).then(result=>{
+      fromFile.parseHTML(file).then(result=>{
 
         req.session.fromFile = result;
         res.send({redirect: '/cadastroArquivo'});
