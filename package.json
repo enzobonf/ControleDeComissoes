@@ -22,7 +22,6 @@
     "multer": "^1.4.2",
     "mysql2": "^2.0.2",
     "nodemailer": "^6.4.2",
-    "puppeteer-core": "^3.0.1",
     "redis": "^2.8.0",
     "s": "^1.0.0"
   }

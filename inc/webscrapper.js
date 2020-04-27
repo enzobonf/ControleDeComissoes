@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 /* const prompt = require('prompt-async');
 
 let schema = {
@@ -166,7 +166,7 @@ const gerarBoleto = async (page, valor, vencimento)=>{
 async function init(headless = true){
 
     const browser = await puppeteer.launch({
-        executablePath: 'C:\\Users\\Enzo\\Documents\\Cursos Udemy\\JS\\Teste-Web-Scrapping\\node_modules\\puppeteer\\.local-chromium\\win64-737027\\chrome-win\\chrome.exe',
+        //executablePath: 'C:\\Users\\Enzo\\Documents\\Cursos Udemy\\JS\\Teste-Web-Scrapping\\node_modules\\puppeteer\\.local-chromium\\win64-737027\\chrome-win\\chrome.exe',
         slowMo: 50,
         headless
     });
