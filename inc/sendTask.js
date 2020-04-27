@@ -127,10 +127,11 @@ function sendEmail(token){
                         });
 
                     }).catch(err=>{
+                        console.log(err);
                         reject({
                             message: err
                         });
-                    });;
+                    });
 
                 }
                 else{
