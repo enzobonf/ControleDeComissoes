@@ -104,3 +104,4 @@ typings/
 
 # email credentials
 inc/credentials.json
+inc/bankCredentials.json
