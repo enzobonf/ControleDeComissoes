@@ -25,7 +25,7 @@ function sendEmail(){
                     alert(message);
                 })
             });
-            console.log('Aguardando geração do boleto...');
+            alert('Aguardando geração do boleto...');
             
         }
         else{
