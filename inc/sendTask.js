@@ -3,6 +3,9 @@ const CronJob = require('cron').CronJob;
 let emailer = require('./emailer');
 let moment = require('moment');
 const credentials = require('./credentials.json');
+const bankCredentials = require('./bankCredentials.json');
+
+const webscrapper = require('../inc/webscrapper');
 
 function getSituation(situation, receivementDate){
 
@@ -72,7 +75,15 @@ function getTr(results){
 
 }
 
-function sendEmail(){
+async function gerarBoleto(token, valor, diasParaVencer){
+
+    let page = await webscrapper.init(true);
+    await webscrapper.login(page, bankCredentials.conta, bankCredentials.senha, token);
+    return await webscrapper.gerarBoleto(page, valor, moment().add(diasParaVencer, 'days').format('DD/MM/YYYY'));
+
+};
+
+function sendEmail(token){
     return new Promise((resolve, reject)=>{
 
         let req = {query: {sit: 'atrasadas'}};
@@ -86,24 +97,65 @@ function sendEmail(){
                 let arrayTr = getTr(results.data);
                 let somaComissoes = arrayTr.somaComissoes;
                 let tr = arrayTr.tr;
+                let codigoBoleto = '';
+                
+                let diasParaVencer = '4'
 
-                emailText = `Oi mãe, <br>
+                if(token !== ''){
+                    gerarBoleto(token, somaComissoes, diasParaVencer).then(response=>{
+
+                        codigoBoleto = response;
+
+                        emailText = `Oi mãe, <br>
+                        Existem ${numeroAtrasadas} comissões atrasadas. <br>
+                        Somando um valor total de R$ ${somaComissoes}, <br>
+                        Espero que me pague rápido kkkkkkk <p>
+                        <b>Código do boleto para pagamento:</b> ${codigoBoleto} <br>
+                        (Vence em ${diasParaVencer} dias)
+                        (Email automático enviado e boleto gerado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
+                    
+                        emailer.sendEmail(`BOLETO - ${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
+                            resolve({
+                                message: 'Email com boleto enviado com sucesso!',
+                                table: tr,
+                                somaComissoes
+                            });
+                        }).catch(err=>{
+                            reject({
+                                message: err
+                            });
+                        });
+
+                    }).catch(err=>{
+                        reject({
+                            message: err
+                        });
+                    });;
+
+                }
+                else{
+
+                    emailText = `Oi mãe, <br>
                     Existem ${numeroAtrasadas} comissões atrasadas. <br>
                     Somando um valor total de R$ ${somaComissoes}, <br>
-                    Espero que me pague rápido kkkkkkk <p>        
+                    Espero que me pague rápido kkkkkkk <p>
                     (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
                 
-                emailer.sendEmail(`${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
-                    resolve({
-                        message: 'Email enviado com sucesso!',
-                        table: tr,
-                        somaComissoes
+                    emailer.sendEmail(`${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
+                        resolve({
+                            message: 'Email enviado com sucesso!',
+                            table: tr,
+                            somaComissoes
+                        });
+                    }).catch(err=>{
+                        reject({
+                            message: err
+                        });
                     });
-                }).catch(err=>{
-                    reject({
-                        message: err
-                    });
-                });
+
+                }
+
+                
 
             }
             else{
@@ -133,9 +185,9 @@ module.exports = {
 
     },
 
-    sendDirectly(){
+    sendDirectly(token){
         return new Promise((resolve, reject)=>{
-            sendEmail().then(results=>{
+            sendEmail(token).then(results=>{
                 resolve(results);
             }).catch(err=>{
                 reject(err);

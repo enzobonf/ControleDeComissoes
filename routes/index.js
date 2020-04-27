@@ -111,7 +111,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/send', function(req, res, next) {
-  sendTask.sendDirectly().then(result=>{
+
+  let token = '';
+  console.log(req.query);
+  if(req.query.tokenBoleto ) token = req.query.tokenBoleto;
+
+  sendTask.sendDirectly(token).then(result=>{
 
       if(req.query.noView === ''){
         res.send(result);

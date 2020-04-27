@@ -12,16 +12,36 @@ this.inputFiles.addEventListener('change', event=>{
 
 function sendEmail(){
     if(confirm('Deseja realmente enviar o email?')){
-        fetch('/send?noView', {
-            method: 'GET',
-        }).then(response=>{
-            response.json().then(json=>{
-                let message = json.message;
-                if(json.somaComissoes) message = message + `\nHá R$ ${json.somaComissoes} em comissões atrasadas.`;
+        if(confirm('Com boleto?')){
 
-                alert(message);
-            })
-        });
+            let token = prompt('Insira o token i-Safe do Banco Inter:');
+            fetch(`/send?noView&tokenBoleto=${token}`, {
+                method: 'GET',
+            }).then(response=>{
+                response.json().then(json=>{
+                    let message = json.message;
+                    if(json.somaComissoes) message = message + `\nHá R$ ${json.somaComissoes} em comissões atrasadas.`;
+
+                    alert(message);
+                })
+            });
+            console.log('Aguardando geração do boleto...');
+            
+        }
+        else{
+
+            fetch('/send?noView', {
+                method: 'GET',
+            }).then(response=>{
+                response.json().then(json=>{
+                    let message = json.message;
+                    if(json.somaComissoes) message = message + `\nHá R$ ${json.somaComissoes} em comissões atrasadas.`;
+
+                    alert(message);
+                })
+            });
+
+        }
     }
 }
 
