@@ -102,6 +102,7 @@ function sendEmail(token){
                 let diasParaVencer = '4'
 
                 if(token !== ''){
+                    console.log('token existe');
                     gerarBoleto(token, somaComissoes, diasParaVencer).then(response=>{
 
                         codigoBoleto = response;
