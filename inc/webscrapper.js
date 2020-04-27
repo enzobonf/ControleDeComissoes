@@ -171,9 +171,11 @@ async function init(headless = true){
         //executablePath: 'C:\\Users\\Enzo\\Documents\\Cursos Udemy\\JS\\Teste-Web-Scrapping\\node_modules\\puppeteer\\.local-chromium\\win64-737027\\chrome-win\\chrome.exe',
         slowMo: 50,
         headless,
-        args: ['--no-sandbox']
+        args: ['--no-sandbox', '--disable-gpu']
     });
     
+    console.log('Navegador iniciado');
+
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(0);
 
