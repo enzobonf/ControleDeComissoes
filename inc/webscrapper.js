@@ -116,8 +116,10 @@ const gerarBoleto = async (page, valor, vencimento)=>{
 
     vencimento = await vencimento.replace(new RegExp('/', 'g'), '');
 
+    console.log('Carregando página inicial');
     await page.goto('https://internetbanking.bancointer.com.br/contacorrente/pagueFacil.jsf');
     await page.waitFor('#edtVlrBoleto');
+    console.log('Página inicial carregada');
 
     await page.evaluate(()=>document.querySelector('#edtVlrBoleto').value = '');
     console.log('Digitando valor do boleto');
@@ -173,6 +175,7 @@ async function init(headless = true){
     });
     
     const page = await browser.newPage();
+    await page.setDefaultNavigationTimeout(0);
 
     /* await login(page, '147382');
     await getSaldo(page);
