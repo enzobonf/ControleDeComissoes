@@ -168,7 +168,8 @@ async function init(headless = true){
     const browser = await puppeteer.launch({
         //executablePath: 'C:\\Users\\Enzo\\Documents\\Cursos Udemy\\JS\\Teste-Web-Scrapping\\node_modules\\puppeteer\\.local-chromium\\win64-737027\\chrome-win\\chrome.exe',
         slowMo: 50,
-        headless
+        headless,
+        args: ['--no-sandbox']
     });
     
     const page = await browser.newPage();
