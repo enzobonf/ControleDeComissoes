@@ -8,6 +8,8 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const client = redis.createClient();
 
+var socket = require('socket.io');
+
 const multer = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({storage});

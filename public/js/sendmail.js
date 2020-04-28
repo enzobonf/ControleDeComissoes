@@ -19,6 +19,7 @@ function sendEmail(){
                 method: 'GET',
             }).then(response=>{
                 response.json().then(json=>{
+                    console.log(json);
                     let message = json.message;
                     if(json.somaComissoes) message = message + `\nHá R$ ${json.somaComissoes} em comissões atrasadas.`;
 

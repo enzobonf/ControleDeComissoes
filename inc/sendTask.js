@@ -6,6 +6,7 @@ const credentials = require('./credentials.json');
 const bankCredentials = require('./bankCredentials.json');
 
 const webscrapper = require('../inc/webscrapper');
+var io = require('socket.io-client');
 
 function getSituation(situation, receivementDate){
 
@@ -75,11 +76,42 @@ function getTr(results){
 
 }
 
-async function gerarBoleto(token, valor, diasParaVencer){
+function gerarBoleto(token, valor, vencimento){
 
-    let page = await webscrapper.init(true);
+    /* let browser = await webscrapper.init();
+    let page = await browser.newPage();
     await webscrapper.login(page, bankCredentials.conta, bankCredentials.senha, token);
-    return await webscrapper.gerarBoleto(page, valor, moment().add(diasParaVencer, 'days').format('DD/MM/YYYY'));
+    return await webscrapper.gerarBoleto(page, valor, moment().add(diasParaVencer, 'days').format('DD/MM/YYYY'), browser); */
+
+    return new Promise((resolve, reject)=>{
+
+        var socket = io.connect("https://geradorboleto.herokuapp.com/", {
+            reconnection: true
+        });
+
+        socket.on('connect', ()=>{
+
+            console.log('conectado ao socket remoto');
+            socket.emit('gerarBoleto', {token, valor, vencimento});
+            
+            socket.on('message', function(message){
+                console.log(message);
+            });
+
+            socket.on('erro', function(err){
+                reject(err);
+                socket.close();
+            });
+
+            socket.on('boleto gerado', function(codigo){
+                resolve(codigo);
+                socket.close();
+            });
+
+
+        });
+
+    });
 
 };
 
@@ -103,29 +135,41 @@ function sendEmail(token){
 
                 if(token !== ''){
                     console.log('token existe');
-                    gerarBoleto(token, somaComissoes, diasParaVencer).then(response=>{
+                    if(somaComissoes < 20.00) return reject({message: 'O boleto precisa ser de no mínimo R$ 20,00'});
+                    gerarBoleto(token, somaComissoes, moment().add(diasParaVencer, 'days').format('DD/MM/YYYY')).then(response=>{
 
-                        codigoBoleto = response;
+                        if(response !== ''){
 
-                        emailText = `Oi mãe, <br>
-                        Existem ${numeroAtrasadas} comissões atrasadas. <br>
-                        Somando um valor total de R$ ${somaComissoes}, <br>
-                        Espero que me pague rápido kkkkkkk <p>
-                        <b>Código do boleto para pagamento:</b> ${codigoBoleto} <br>
-                        (Vence em ${diasParaVencer} dias)
-                        (Email automático enviado e boleto gerado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
-                    
-                        emailer.sendEmail(`BOLETO - ${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
-                            resolve({
-                                message: 'Email com boleto enviado com sucesso!',
-                                table: tr,
-                                somaComissoes
+                            codigoBoleto = response;
+
+                            emailText = `Oi mãe, <br>
+                            Existem ${numeroAtrasadas} comissões atrasadas. <br>
+                            Somando um valor total de R$ ${somaComissoes}, <br>
+                            Espero que me pague rápido kkkkkkk <p>
+                            <h2><b>Código do boleto para pagamento:</b></h2>
+                            <h3>${codigoBoleto}</h3>
+                            (Vence em ${diasParaVencer} dias) <p>
+                            (Email automático enviado e boleto gerado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
+                        
+                            emailer.sendEmail(`BOLETO - ${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
+                                resolve({
+                                    message: 'Email com boleto enviado com sucesso!',
+                                    table: tr,
+                                    somaComissoes
+                                });
+                            }).catch(err=>{
+                                reject({
+                                    message: err
+                                });
                             });
-                        }).catch(err=>{
+
+                        }
+                        else{
                             reject({
-                                message: err
+                                message: 'Erro ao gerar boleto'
                             });
-                        });
+                        }
+
 
                     }).catch(err=>{
                         console.log(err);
@@ -156,8 +200,6 @@ function sendEmail(token){
                     });
 
                 }
-
-                
 
             }
             else{

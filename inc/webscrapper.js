@@ -53,7 +53,7 @@ const login = async (page, conta, senha, token)=>{
     await page.waitFor('input[name=loginv20170605]');
     await console.log('digitando número da conta');
     await page.type('input[name=loginv20170605]', conta);
-    //await page.type('input[name=senha]', pass, {delay: 185});
+    console.log('Conta digitada');
 
     await page.click('#panelPrincipal > div.grid-40.mobile-grid-50.tablet-grid-40 input[type=submit]');
     await page.waitFor('#panelGeralv20170605 > div.grid-30.mobile-grid-100.tablet-grid-50.topo20.topo30-tablet a');
@@ -106,7 +106,7 @@ const getSaldo = async (page)=>{
 
 };
 
-const gerarBoleto = async (page, valor, vencimento)=>{
+const gerarBoleto = async (page, valor, vencimento, browser)=>{
 
     /* let arrayVencimento = vencimento.split('/');
     
@@ -160,6 +160,9 @@ const gerarBoleto = async (page, valor, vencimento)=>{
     let codigoBarras = await page.evaluate(element => element.textContent, codigoElement);
 
     console.log('Código de barras:', codigoBarras);
+
+    await browser.close();
+
     return codigoBarras;
 
 
@@ -171,19 +174,16 @@ async function init(headless = true){
         //executablePath: 'C:\\Users\\Enzo\\Documents\\Cursos Udemy\\JS\\Teste-Web-Scrapping\\node_modules\\puppeteer\\.local-chromium\\win64-737027\\chrome-win\\chrome.exe',
         slowMo: 50,
         headless,
-        args: ['--no-sandbox', '--disable-gpu']
+        args: ['--no-sandbox', '--disable-gpu', '--enable-features=NetworkService']
     });
     
     console.log('Navegador iniciado');
-
-    const page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(0);
 
     /* await login(page, '147382');
     await getSaldo(page);
     await gerarBoleto(page, '20,00', '30/04/2020');
  */
-    return page;
+    return browser;
 
 
 };
