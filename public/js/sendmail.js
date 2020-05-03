@@ -12,7 +12,7 @@ this.inputFiles.addEventListener('change', event=>{
 
 function sendEmail(){
     if(confirm('Deseja realmente enviar o email?')){
-        if(confirm('Com boleto?')){
+        /* if(confirm('Com boleto?')){
 
             let token = prompt('Insira o token i-Safe do Banco Inter:');
             fetch(`/send?noView&tokenBoleto=${token}`, {
@@ -29,7 +29,7 @@ function sendEmail(){
             alert('Aguardando geração do boleto...');
             
         }
-        else{
+        else{ */
 
             fetch('/send?noView', {
                 method: 'GET',
@@ -42,7 +42,7 @@ function sendEmail(){
                 })
             });
 
-        }
+        //}
     }
 }
 

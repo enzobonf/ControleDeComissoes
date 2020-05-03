@@ -3,10 +3,10 @@ const CronJob = require('cron').CronJob;
 let emailer = require('./emailer');
 let moment = require('moment');
 const credentials = require('./credentials.json');
-const bankCredentials = require('./bankCredentials.json');
 
+/* const bankCredentials = require('./bankCredentials.json');
 const webscrapper = require('../inc/webscrapper');
-var io = require('socket.io-client');
+var io = require('socket.io-client'); */
 
 function getSituation(situation, receivementDate){
 
@@ -115,7 +115,7 @@ function gerarBoleto(token, valor, vencimento){
 
 };
 
-function sendEmail(token){
+function sendEmail(token = ''){
     return new Promise((resolve, reject)=>{
 
         let req = {query: {sit: 'atrasadas'}};
