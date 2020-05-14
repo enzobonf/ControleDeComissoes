@@ -76,12 +76,12 @@ function getTr(results){
 
 }
 
-function gerarBoleto(token, valor, vencimento){
+/* function gerarBoleto(token, valor, vencimento){
 
-    /* let browser = await webscrapper.init();
+    let browser = await webscrapper.init();
     let page = await browser.newPage();
     await webscrapper.login(page, bankCredentials.conta, bankCredentials.senha, token);
-    return await webscrapper.gerarBoleto(page, valor, moment().add(diasParaVencer, 'days').format('DD/MM/YYYY'), browser); */
+    return await webscrapper.gerarBoleto(page, valor, moment().add(diasParaVencer, 'days').format('DD/MM/YYYY'), browser);
 
     return new Promise((resolve, reject)=>{
 
@@ -113,7 +113,7 @@ function gerarBoleto(token, valor, vencimento){
 
     });
 
-};
+}; */
 
 function sendEmail(token = ''){
     return new Promise((resolve, reject)=>{

@@ -31,13 +31,9 @@ const formatDates = (dataPedido) => {
 
 const formatarSituacao = situacao => {
   if(situacao.indexOf('Enviado') != -1) return true;
-  if(situacao.indexOf('Cancelado') != -1) return false;
   if(situacao.indexOf('Entregue') != -1) return true;
-  if(situacao.indexOf('Devolvido') != -1) return false;
   if(situacao.indexOf('Pago') != -1) return true;
   if(situacao.indexOf('em separação') != -1) return true;
-  if(situacao.indexOf('Efetuado') != -1) return false;
-  if(situacao.indexOf('Aguardando pagamnto') != -1) return false;
   return false;
 }
 

@@ -7,8 +7,6 @@ var md5 = require('md5');
 var moment = require('moment');
 var fromFile = require('../inc/fromFile');
 
-const fs = require('fs');
-
 moment.locale('pt-BR');
 
 function getResponse(result){
