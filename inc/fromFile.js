@@ -29,6 +29,10 @@ const formatDates = (dataPedido) => {
   
 };
 
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1)
+}
+
 const formatarSituacao = situacao => {
   if(situacao.indexOf('Enviado') != -1) return true;
   if(situacao.indexOf('Entregue') != -1) return true;
@@ -36,6 +40,7 @@ const formatarSituacao = situacao => {
   if(situacao.indexOf('em separação') != -1) return true;
   return false;
 }
+
 
 module.exports = {
 
@@ -117,6 +122,7 @@ module.exports = {
 
               let SITUACAO_PEDIDO = $(tablePedidos[i]).find(`#situacao_id_${ID_PEDIDO}_chosen > a > span`).text();
               if(SITUACAO_PEDIDO.indexOf('Pedido') !== -1) SITUACAO_PEDIDO = SITUACAO_PEDIDO.replace('Pedido ', '');
+              SITUACAO_PEDIDO = SITUACAO_PEDIDO.capitalize();
 
               let DATA_RECEBIMENTO = formatDates($(tablePedidos[i]).find(' td.data.footable-visible > span > span.text-muted').text()).dataRecebimento;
 
