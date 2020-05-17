@@ -79,11 +79,13 @@ this.inputFiles.addEventListener('change', event=>{
         parseHTML(html).then(pedidos=>{
 
             uploadTask(pedidos).then(response=>{
+                console.log(response);
                 (response.redirect) ? window.location.href = response.redirect : alert(response.error);
             }).catch(err=>{
                 console.log(err);
                 alert('Ocorreu um erro!');
                 this.inputFiles.value = '';
+                html = null;
             });
 
         });

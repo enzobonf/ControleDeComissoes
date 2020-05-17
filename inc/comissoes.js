@@ -70,7 +70,7 @@ module.exports = {
                     {
                         text: 'Cadastrar com Arquivo',
                         href: '/cadastroArquivo',
-                        onclick: 'selectImageOCR()',
+                        onclick: 'selectImageOCR(moment)',
                         icon: 'plus',
                         active: false
                     }
