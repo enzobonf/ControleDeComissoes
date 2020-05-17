@@ -74,24 +74,31 @@ this.inputFiles.addEventListener('change', event=>{
     }); */
 
     var fr=new FileReader(); 
-    fr.onload=function(){ 
-        let html = fr.result;
-        parseHTML(html).then(pedidos=>{
+    fr.onload = function(){ 
 
+        let html = fr.result;
+
+        parseHTML(html).then(pedidos=>{
+            console.log(pedidos);
             uploadTask(pedidos).then(response=>{
                 console.log(response);
                 (response.redirect) ? window.location.href = response.redirect : alert(response.error);
             }).catch(err=>{
                 console.log(err);
-                alert('Ocorreu um erro!');
+                alert('Ocorreu um erro no servidor!');
                 this.inputFiles.value = '';
-                html = null;
+                html = '';
             });
 
+        }).catch(err=>{
+            alert('Ocorreu um erro ao processar o arquivo!');
         });
     } 
-              
-    fr.readAsText(event.target.files[0]); 
+    
+    let extension = event.target.files[0].name.split('.')[1];
+    
+    (extension === 'html' ) ? fr.readAsText(event.target.files[0]) : alert('Envie um arquivo HTML!');
+
 });
 
 function parseHTML(html){
@@ -99,6 +106,9 @@ function parseHTML(html){
     return new Promise((resolve, reject)=>{
 
         try{
+
+            $(html).find('img').attr('src','');
+            console.log($(html).find('img'))
 
             let tablePedidos = $(html).find('#mainContent > div:nth-child(3) > div:nth-child(3) > div.box-content.table-content > table > tbody > tr');
 

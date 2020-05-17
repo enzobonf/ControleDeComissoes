@@ -271,10 +271,18 @@ router.delete('/comissoes/:id', function(req, res, next){
 
 router.post('/cadastroArquivo', function(req, res, next){
 
-  let pedidos = JSON.parse(req.body.pedidos);
-  req.session.fromFile = pedidos;
+  if(req.body.pedidos){
 
-  res.send({redirect: '/cadastroArquivo'});
+    let pedidos = JSON.parse(req.body.pedidos);
+    console.log(pedidos);
+    req.session.fromFile = [];
+    req.session.fromFile = pedidos;
+
+    res.send({redirect: '/cadastroArquivo'});
+  }
+  else{
+    res.send({error: 'Erro na leitura do arquivo'});
+  }
 
 });
 
