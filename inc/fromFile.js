@@ -122,7 +122,6 @@ module.exports = {
 
               let SITUACAO_PEDIDO = $(tablePedidos[i]).find(`#situacao_id_${ID_PEDIDO}_chosen > a > span`).text();
               if(SITUACAO_PEDIDO.indexOf('Pedido') !== -1) SITUACAO_PEDIDO = SITUACAO_PEDIDO.replace('Pedido ', '');
-              SITUACAO_PEDIDO = SITUACAO_PEDIDO.capitalize();
 
               let DATA_RECEBIMENTO = formatDates($(tablePedidos[i]).find(' td.data.footable-visible > span > span.text-muted').text()).dataRecebimento;
 
@@ -133,7 +132,7 @@ module.exports = {
 
               let ESTA_PAGO = formatarSituacao(SITUACAO_PEDIDO);
 
-              pedidos.push({ID_PEDIDO, SITUACAO_PEDIDO, SITUACAO: 0,  DATA_RECEBIMENTO, VALOR_PEDIDO, VALOR_COMISSAO, FORMA_PAGAMENTO, ESTA_PAGO});
+              pedidos.push({ID_PEDIDO, SITUACAO_PEDIDO: SITUACAO_PEDIDO.capitalize(), SITUACAO: 0,  DATA_RECEBIMENTO, VALOR_PEDIDO, VALOR_COMISSAO, FORMA_PAGAMENTO, ESTA_PAGO});
 
             }
 

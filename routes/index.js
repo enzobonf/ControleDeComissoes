@@ -5,7 +5,7 @@ var users = require('./../inc/users')
 var sendTask = require('./../inc/sendTask');
 var md5 = require('md5');
 var moment = require('moment');
-var fromFile = require('../inc/fromFile');
+//var fromFile = require('../inc/fromFile');
 
 moment.locale('pt-BR');
 
@@ -214,11 +214,11 @@ router.delete('/comissoes/:id', function(req, res, next){
 
 });
 
-router.post('/cadastroArquivo', function(req, res, next){
+//router.post('/cadastroArquivo', function(req, res, next){
   
-  if(req.files){
+//  if(req.files){
 
-    let file = req.files[0].buffer;
+//    let file = req.files[0].buffer;
     
     /* let fileType = req.files.file.type.substring(0,5);
     if(fileType == 'image'){
@@ -240,7 +240,7 @@ router.post('/cadastroArquivo', function(req, res, next){
       });
     } */
 
-    let fileType = req.files[0].mimetype;
+    /* let fileType = req.files[0].mimetype;
     if(fileType == 'text/html'){
       
       fromFile.parseHTML(file).then(result=>{
@@ -254,18 +254,27 @@ router.post('/cadastroArquivo', function(req, res, next){
 
     }
     else{
-      res.send({error: 'Envie um arquivo HTML!'});
+      res.send({error: 'Envie um arquivo HTML!'}); */
       /* fs.unlink(file, (err) => {
         if(err){
           console.error(err);
         }
       }); */
-    }
+    /* }
     
   }
   else{
     res.send({error:'Houve erro no upload!'});
   }
+
+}); */
+
+router.post('/cadastroArquivo', function(req, res, next){
+
+  let pedidos = JSON.parse(req.body.pedidos);
+  req.session.fromFile = pedidos;
+
+  res.send({redirect: '/cadastroArquivo'});
 
 });
 
