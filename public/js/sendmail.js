@@ -182,9 +182,3 @@ function selectImageOCR(){
     (userLevel === 'Administrador') ? this.inputFiles.click() : alert('Você não tem permissão para isso!');
 
 }
-
-function parseHTMLFile(file){
-
-
-
-}
