@@ -191,7 +191,6 @@ router.get('/comissoes/chart', function(req, res, next){
 
 router.post('/comissoes/marcarpaga', function(req, res, next){
   
-  console.log(JSON.parse(req.body.ID_COMISSAO));
   comissoes.marcarPaga(JSON.parse(req.body.ID_COMISSAO)).then(results=>{
 
       res.send(results);
