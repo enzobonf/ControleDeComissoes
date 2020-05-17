@@ -138,6 +138,7 @@ router.get('/comissoes', function(req, res, next) {
   comissoes.chart(chartStart, end).then(chartData=>{
 
       comissoes.select(req).then(pag=>{
+
         res.render('comissoes', comissoes.getParams(req, {
           date: {
             start,
@@ -189,8 +190,9 @@ router.get('/comissoes/chart', function(req, res, next){
 });
 
 router.post('/comissoes/marcarpaga', function(req, res, next){
-
-  comissoes.marcarPaga(req.body.ID_COMISSAO).then(results=>{
+  
+  console.log(JSON.parse(req.body.ID_COMISSAO));
+  comissoes.marcarPaga(JSON.parse(req.body.ID_COMISSAO)).then(results=>{
 
       res.send(results);
 

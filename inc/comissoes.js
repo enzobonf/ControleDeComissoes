@@ -316,14 +316,16 @@ module.exports = {
 
     },
 
-    marcarPaga(id){
+    marcarPaga(ids){
         
         return new Promise((resolve, reject)=>{
 
+            let formatedIds = ids.join(',').match(/[0-9]{0,10}/, '').toString();
+
             conn.query(`
-                UPDATE Comissoes SET SITUACAO = 1 WHERE ID_COMISSAO = ?
+                UPDATE Comissoes SET SITUACAO = 1 WHERE ID_COMISSAO IN (${formatedIds})
             `, [
-                id
+                formatedIds
             ], (err, results)=>{
 
                 if(err){

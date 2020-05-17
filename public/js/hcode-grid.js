@@ -114,8 +114,6 @@ class HcodeGrid{
 
         this.fireEvent('beforeDeleteClick');
 
-        let data = this.getTrData(e);
-
         if(confirm(eval('`' + this.options.deleteMessage + '`'))){
             fetch(eval('`' + this.options.deleteUrl + '`'), {
 
@@ -134,7 +132,7 @@ class HcodeGrid{
         let data = this.getTrData(e);
 
         let formData = new FormData();
-        formData.append('ID_COMISSAO', data.ID_COMISSAO);
+        formData.append('ID_COMISSAO', `[${data.ID_COMISSAO}]`);
 
         if(confirm(eval('`' + this.options.marcarPagaMessage + '`'))){
             fetch(eval('`' + this.options.marcarPagaUrl + '`'), {
