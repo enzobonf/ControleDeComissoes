@@ -3,7 +3,7 @@ const moment = require('moment');
 const isWin = process.platform === "win32";
 const fs = require('fs');
 
-const cheerio = require('cheerio');
+//const cheerio = require('cheerio');
 
 let porcentagem = 6;
 
