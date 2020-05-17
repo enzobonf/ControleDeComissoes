@@ -76,7 +76,7 @@ this.inputFiles.addEventListener('change', event=>{
     var fr=new FileReader(); 
     fr.onload = function(){ 
 
-        let html = fr.result;
+        let html = fr.result.replace(/src=((['][^']*['])|(["][^"]*["]))/igm, "").replace(/<link[^>]*>/igm, ""); ;
 
         parseHTML(html).then(pedidos=>{
             console.log(pedidos);
@@ -106,9 +106,6 @@ function parseHTML(html){
     return new Promise((resolve, reject)=>{
 
         try{
-
-            $(html).find('img').attr('src','');
-            console.log($(html).find('img'))
 
             let tablePedidos = $(html).find('#mainContent > div:nth-child(3) > div:nth-child(3) > div.box-content.table-content > table > tbody > tr');
 
