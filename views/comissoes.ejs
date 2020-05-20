@@ -61,7 +61,7 @@
               </a>
             <% } %><p></p>
             <% if(user.NOME_NIVEL === 'Administrador') { %>
-            <a style="display: none;" id="btnMarcarPagasVarias" href="#" class="btn btn-xs pull-right btn-success btn-marcarpaga-varias" ><i 
+            <a id="btnMarcarPagasVarias" href="#" class="btn btn-xs pull-right btn-success btn-marcarpaga-varias" disabled><i 
               class="fa fa-check"></i>Marcar selecionadas como pagas
             </a>
             <% } %>
@@ -378,10 +378,10 @@
               $(rowEl).toggleClass('rowSelected');
 
               if(document.querySelectorAll('.rowSelected').length > 0){
-                $('#btnMarcarPagasVarias').show();
+                $('#btnMarcarPagasVarias').attr('disabled', false);
               }
               else{
-                $('#btnMarcarPagasVarias').hide();
+                $('#btnMarcarPagasVarias').attr('disabled', true);
               }
 
             });
@@ -390,39 +390,42 @@
         let btnMarcarPagasVarias = document.getElementById('btnMarcarPagasVarias');
         if(btnMarcarPagasVarias) btnMarcarPagasVarias.addEventListener('click', e=>{
 
-          let arraySelected = [];
+          if(!$(btnMarcarPagasVarias).attr('disabled')){
 
-          let selectedRows = $('.rowSelected');
-          
-          if(selectedRows.length > 0){
+            let arraySelected = [];
 
-              [...selectedRows].forEach(row=>{
+            let selectedRows = $('.rowSelected');
+            
+            if(selectedRows.length > 0){
 
-                arraySelected.push($(row).data().row);
+                [...selectedRows].forEach(row=>{
 
-              });
-
-              let totalSelected = parseFloat(arraySelected.map((row)=>row.VALOR_COMISSAO).reduce((total, valor) => parseFloat(total) + parseFloat(valor))).toFixed(2);
-          
-              if(confirm(`Deseja realmente marcar a(s) ${arraySelected.length} comiss(ões) como pagas?\nTotal: R$ ${totalSelected}`)){
-
-                let formData = new FormData();
-                formData.append('ID_COMISSAO', JSON.stringify(arraySelected.map((row)=>row.ID_COMISSAO)));
-
-                fetch('/comissoes/marcarpaga', {
-                  method: 'POST',
-                  body: formData
-                }).then(response=>response.json()).then(json=>{
-                  
-                  (!json.errno) ? window.location.reload() : alert(json.sqlMessage);
+                  arraySelected.push($(row).data().row);
 
                 });
 
-              }
+                let totalSelected = parseFloat(arraySelected.map((row)=>row.VALOR_COMISSAO).reduce((total, valor) => parseFloat(total) + parseFloat(valor))).toFixed(2);
+            
+                if(confirm(`Deseja realmente marcar a(s) ${arraySelected.length} comiss(ões) como pagas?\nTotal: R$ ${totalSelected}`)){
 
-          }
-          else{
-            alert('Nenhuma comissão está selecionada!');
+                  let formData = new FormData();
+                  formData.append('ID_COMISSAO', JSON.stringify(arraySelected.map((row)=>row.ID_COMISSAO)));
+
+                  fetch('/comissoes/marcarpaga', {
+                    method: 'POST',
+                    body: formData
+                  }).then(response=>response.json()).then(json=>{
+                    
+                    (!json.errno) ? window.location.reload() : alert(json.sqlMessage);
+
+                  });
+
+                }
+
+            }
+            else{
+              alert('Nenhuma comissão está selecionada!');
+            }
           }
 
         });
