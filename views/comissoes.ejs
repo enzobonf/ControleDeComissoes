@@ -58,12 +58,12 @@
               <a style="background-color: #3c8dbc;" href="#" class="btn btn-xs pull-right btn-success" data-toggle="modal" data-target="#modal-create"><i
                 class="fa fa-plus"></i>
               Novo
-              </a>
-            <% } %><p></p>
-            <% if(user.NOME_NIVEL === 'Administrador') { %>
-            <a id="btnMarcarPagasVarias" href="#" class="btn btn-xs pull-right btn-success btn-marcarpaga-varias" disabled><i 
-              class="fa fa-check"></i>Marcar selecionadas como pagas
-            </a>
+              </a><p></p>
+              <% if(temSemPagar) { %>
+                <a id="btnMarcarPagasVarias" href="#" class="btn btn-xs pull-right btn-success btn-marcarpaga-varias" disabled><i 
+                  class="fa fa-check"></i>Marcar selecionadas como pagas
+                </a>
+              <% } %>
             <% } %>
           </div>
           <div class="box-header" style="height:44px;">
