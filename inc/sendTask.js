@@ -189,7 +189,7 @@ function sendEmail(token = ''){
                     Espero que me pague rápido kkkkkkk <p>
                     (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
                 
-                    emailer.sendEmail(`${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
+                    emailer.sendEmail(`${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, process.env.TO).then(result=>{
                         resolve({
                             message: 'Email enviado com sucesso!',
                             table: tr,
