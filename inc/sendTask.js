@@ -117,7 +117,7 @@ function getTr(results){
 
 function sendEmail(token = ''){
     return new Promise((resolve, reject)=>{
-
+        console.log('a');
         let req = {query: {sit: 'atrasadas'}};
 
         comissoes.select(req).then(results=>{
