@@ -25,6 +25,8 @@ app.use(bodyParser.json());
 
 app.use(upload.any());
 
+require('dotenv').config();
+
 /*app.use(function(req, res, next){
 
   if(req.method === 'POST'){
@@ -60,8 +62,8 @@ app.set('view engine', 'ejs');
 app.use(session({
 
   store: new RedisStore({
-    host: 'localhost',
-    port: 6379,
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
     client,
   }),
   secret: 'Windows10',
