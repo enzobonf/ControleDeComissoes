@@ -2,11 +2,13 @@ const comissoes = require('./comissoes');
 const CronJob = require('cron').CronJob;
 let emailer = require('./emailer');
 let moment = require('moment');
-const credentials = require('./credentials.json');
+//const credentials = require('./credentials.json');
 
 /* const bankCredentials = require('./bankCredentials.json');
 const webscrapper = require('../inc/webscrapper');
 var io = require('socket.io-client'); */
+
+require('dotenv').config();
 
 function getSituation(situation, receivementDate){
 
@@ -151,7 +153,7 @@ function sendEmail(token = ''){
                             (Vence em ${diasParaVencer} dias) <p>
                             (Email automático enviado e boleto gerado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
                         
-                            emailer.sendEmail(`BOLETO - ${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, credentials.to).then(result=>{
+                            emailer.sendEmail(`BOLETO - ${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, process.env.TO).then(result=>{
                                 resolve({
                                     message: 'Email com boleto enviado com sucesso!',
                                     table: tr,
