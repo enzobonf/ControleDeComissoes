@@ -6,7 +6,7 @@ const logger = require('morgan');
 const redis   = require("redis");
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
-const client = redis.createClient();
+const client = redis.createClient(process.env.REDIS_URL);
 
 const multer = require('multer');
 var storage = multer.memoryStorage();
