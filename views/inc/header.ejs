@@ -102,7 +102,6 @@
                 <i class="fa fa-<%= menu.icon %>"></i>
                 <span><%= menu.text %></span>
               </a>
-              <% let subMenuAtual = ''; %>
               <% if(menu.subMenus){ %>
                 <ul class="treeview-menu" <% if(!menu.active){%>style="display: none;"<%}%>>
                 <% menu.subMenus.forEach(subMenu=>{ %>
