@@ -338,6 +338,7 @@
       </script>
 
       <script src="/js/initInputComissoes.js"></script>
+      <script src="/js/drag-check-js-master/dist/jquery.dragcheck.js"></script>
 
       <script>
         new HcodeGrid({
@@ -372,6 +373,9 @@
         });
 
         let checkboxes = document.querySelectorAll('.checkComissoes');
+
+        $(checkboxes).dragCheck();
+
         if(checkboxes) checkboxes.forEach(checkbox=>{
             checkbox.addEventListener('change', e=>{
 
