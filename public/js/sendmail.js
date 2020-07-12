@@ -22,7 +22,7 @@ const formatarSituacao = situacao => {
   if(situacao.indexOf('Enviado') != -1) return true;
   if(situacao.indexOf('Entregue') != -1) return true;
   if(situacao.indexOf('Pago') != -1) return true;
-  if(situacao.indexOf('em separação') != -1) return true;
+  if(situacao.indexOf('Em separação') != -1) return true;
   return false;
 }
 

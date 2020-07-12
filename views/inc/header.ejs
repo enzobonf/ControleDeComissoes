@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -101,10 +102,11 @@
                 <i class="fa fa-<%= menu.icon %>"></i>
                 <span><%= menu.text %></span>
               </a>
+              <% let subMenuAtual = ''; %>
               <% if(menu.subMenus){ %>
                 <ul class="treeview-menu" <% if(!menu.active){%>style="display: none;"<%}%>>
                 <% menu.subMenus.forEach(subMenu=>{ %>
-                  <li <% if(subMenu.active){%> class="active" <% } %>><a <% if (subMenu.onclick){ %> onclick="<%= subMenu.onclick %>" href="#" % <% }else{ %>  href="<%= subMenu.href %>" <% } %>><i class="fa fa-<%= subMenu.icon %>"></i> <%= subMenu.text %></a></li>
+                  <li <% if(subMenu.active){ %> class="active" <% } %>><a <% if (subMenu.onclick){ %> onclick="<%= subMenu.onclick %>" href="#" % <% }else{ %>  href="<%= subMenu.href %>" <% } %>><i class="fa fa-<%= subMenu.icon %>"></i> <%= subMenu.text %></a></li>
                 <% }); %>
               </ul>
               <% } %>
