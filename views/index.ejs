@@ -52,6 +52,21 @@
         <div class="clearfix visible-sm-block"></div>
 
         <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box" onclick="window.location.href = '/comissoes'" style="cursor:pointer">
+            <span class="info-box-icon bg-secondary">
+              <i class="ion ion-ios-color-filter-outline"></i>
+            </span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">EA + AT</span>
+              <span class="info-box-number" id="emaberto+atrasadas">R$ <%= (parseFloat(data.emaberto) + parseFloat(data.atrasadas)).toFixed(2) %></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box" <% if(data.pagas != '0.00'){ %> onclick="window.location.href = '/comissoes?sit=pagas'" <% } %> style="cursor:pointer">
             <span class="info-box-icon bg-green">
               <i class="fa fa-check"></i>
@@ -62,23 +77,6 @@
               <span class="info-box-number" id="pagas">R$ <%= data.pagas %></span>
             </div>
             <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box" onclick="window.location.href = '/comissoes'" style="cursor:pointer">
-            <span class="info-box-icon bg-yellow">
-              <i class="ion ion-ios-people-outline"></i>
-            </span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Total Pedidos</span>
-              <span class="info-box-number" id="totalpedidos">R$ <%= data.totalpedidos.toFixed(2) %></span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
         </div>
         <!-- /.col -->
       </div>
