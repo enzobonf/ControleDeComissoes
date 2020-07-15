@@ -131,7 +131,7 @@ router.get('/comissoes', function(req, res, next) {
 
   let start = (req.query.start) ? req.query.start : moment().subtract(2, 'year').format('YYYY-MM-DD');
 
-  let end = (req.query.end) ? req.query.end : moment().format('YYYY-MM-DD');
+  let end = (req.query.end) ? req.query.end : moment().add(14, 'days').format('YYYY-MM-DD');
 
   comissoes.chart(start, end).then(chartData=>{
 

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "test": "nodemon ./bin/www",
     "postinstall": "bower cache clean && cd public && bower install"
   },
   "dependencies": {
