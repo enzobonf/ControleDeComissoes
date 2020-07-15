@@ -130,11 +130,10 @@ router.get('/send', function(req, res, next) {
 router.get('/comissoes', function(req, res, next) {
 
   let start = (req.query.start) ? req.query.start : moment().subtract(2, 'year').format('YYYY-MM-DD');
-  let chartStart = (req.query.start) ? req.query.start : moment().subtract(4, 'year').format('YYYY-MM-DD');
 
   let end = (req.query.end) ? req.query.end : moment().format('YYYY-MM-DD');
 
-  comissoes.chart(chartStart, end).then(chartData=>{
+  comissoes.chart(start, end).then(chartData=>{
 
       comissoes.select(req).then(pag=>{
 
@@ -175,7 +174,7 @@ router.post('/comissoes', function(req, res, next){
 
 });
 
-router.get('/comissoes/chart', function(req, res, next){
+/* router.get('/comissoes/chart', function(req, res, next){
 
   let start = (req.query.start) ? req.query.start : moment(new Date()).subtract(4, 'year').format('YYYY-MM-DD');
   let end = (req.query.end) ? req.query.end : moment(new Date()).format('YYYY-MM-DD');
@@ -186,7 +185,7 @@ router.get('/comissoes/chart', function(req, res, next){
 
   });
   
-});
+}); */
 
 router.post('/comissoes/marcarpaga', function(req, res, next){
   

@@ -67,7 +67,7 @@
               <% } %>
             <% } %>
           </div>
-          <div class="box-header" style="height:44px;">
+          <div class="box-header" style="height:44px; padding: 10px">
             <div class="box-tools">
               <form action="/comissoes" method="GET">
                 <div class="form-group" style="width: 182px; float: left">
@@ -93,8 +93,8 @@
             </div>
           </div>
           <div class="box-header responsive">
-              <div style="padding:10px">
-                <canvas id="chart" height="50"></canvas>
+              <div style="padding:30px">
+                <canvas id="chart" height="70"></canvas>
               </div>
           </div>
           <!-- /.box-header -->
@@ -297,6 +297,7 @@
     <script>
 
         let chartData = JSON.parse('<%- chartData %>');
+        let totalPeriodoChart = chartData.values.map(row=>row).reduce((total, valor) => parseFloat(total) + parseFloat(valor)).toFixed(2);
 
         let chart = new Chart(document.querySelector('#chart').getContext('2d'), {
           type: 'line',
@@ -328,9 +329,13 @@
                 display: true,
                 scaleLabel:{
                   display: true,
-                  labelString: 'Comissões'
+                  labelString: 'Total'
                 }
               }]
+            },
+            title: {
+              display: true,
+              text: `Total período: R$ ${totalPeriodoChart}`
             }
           }
         });
