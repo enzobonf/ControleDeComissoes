@@ -33,7 +33,9 @@ router.use(function(req, res, next){
 
 router.use(function(req, res, next){
 
-  if(req.session.user && (req.url).indexOf('/login') === -1 
+  console.log((req.url).split('/')[1]);
+
+  if(req.session.user && (req.url).split('/')[1].indexOf('/login') === -1 
     && (req.method === 'POST' || req.method === 'DELETE') && req.session.user.NOME_NIVEL != 'Administrador'){
     
       res.send({
@@ -271,7 +273,7 @@ router.post('/cadastroArquivo', function(req, res, next){
   if(req.body.pedidos){
 
     let pedidos = JSON.parse(req.body.pedidos);
-    console.log(pedidos);
+
     req.session.fromFile = [];
     req.session.fromFile = pedidos;
 
