@@ -7,6 +7,10 @@ var md5 = require('md5');
 var moment = require('moment');
 //var fromFile = require('../inc/fromFile');
 
+require('dotenv').config();
+
+const apiToken = process.env.API_TOKEN;
+
 moment.locale('pt-BR');
 
 function getResponse(result){
@@ -21,7 +25,7 @@ function getResponse(result){
 
 router.use(function(req, res, next){
 
-  if((req.url).indexOf('/login') === -1 && !req.session.user){
+  if((req.url).indexOf('/login') === -1 && !req.session.user/*  && apiToken !== req.headers['x-api-key'] */){
       req.session.redirectTo = req.url;
       res.redirect('/login');
   }
@@ -34,7 +38,7 @@ router.use(function(req, res, next){
 router.use(function(req, res, next){
 
   if(req.session.user && (req.url).split('/')[1].indexOf('/login') === -1 
-    && (req.method === 'POST' || req.method === 'DELETE') && req.session.user.NOME_NIVEL != 'Administrador'){
+    && (req.method === 'POST' || req.method === 'DELETE') && req.session.user.NOME_NIVEL != 'Administrador'/*  && apiToken !== req.headers['x-api-key'] */){
     
       res.send({
         error: 'Você não tem permissão para isso!'
@@ -137,16 +141,22 @@ router.get('/comissoes', function(req, res, next) {
 
       comissoes.select(req).then(pag=>{
 
-        res.render('comissoes', comissoes.getParams(req, {
-          date: {
-            start,
-            end
-          },
-          data: pag.data,
-          links: pag.links,
-          moment,
-          chartData: JSON.stringify(chartData)
-        }));
+        if(!req.query.api){
+          res.render('comissoes', comissoes.getParams(req, {
+            date: {
+              start,
+              end
+            },
+            data: pag.data,
+            links: pag.links,
+            moment,
+            chartData: JSON.stringify(chartData)
+          }));
+        }
+        else{
+          res.send(pag.data);
+        }
+
       });
   
     });

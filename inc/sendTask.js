@@ -37,7 +37,7 @@ function getTr(results){
     
     let somaComissoes = 0;
     let tr = `<html>
-                <body>
+                <body style="width: 428px; height: 150px;">
                     <p>
                     <table style='border-radius: 5px; font-family: Calibri;' border='1' cellpadding='0' cellspacing='0'>
                         <thead>
