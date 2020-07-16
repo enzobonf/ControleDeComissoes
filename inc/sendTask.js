@@ -37,7 +37,6 @@ function getTr(results){
     
     let somaComissoes = 0;
     let height = results.length * 25 + 3;
-    console.log(height);
     let tr = `<html>
                 <body style="width: 428px; height: ${height}px;">
                     <p>
