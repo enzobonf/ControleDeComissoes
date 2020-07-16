@@ -33,8 +33,6 @@ router.use(function(req, res, next){
 
 router.use(function(req, res, next){
 
-  console.log((req.url).split('/')[1]);
-
   if(req.session.user && (req.url).split('/')[1].indexOf('/login') === -1 
     && (req.method === 'POST' || req.method === 'DELETE') && req.session.user.NOME_NIVEL != 'Administrador'){
     
@@ -300,6 +298,7 @@ router.get('/cadastroArquivo', function(req, res, next) {
 });
 
 router.get('/users', function(req, res, next){
+
   users.getUsers().then(results=>{
 
     let data = results[0];
@@ -343,6 +342,8 @@ router.post('/users/password-change', function(req, res, next){
       res.send(results);
 
   }).catch(err=>{
+
+    console.log(err);
 
       res.send({
           error: err

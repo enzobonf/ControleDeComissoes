@@ -166,10 +166,10 @@ module.exports = {
 
         return new Promise((resolve, reject)=>{
 
-            if(!req.fields.password){
+            if(!req.body.password){
                 reject('Preencha a senha!');
             }
-            else if(req.fields.password !== req.fields.passwordConfirm){
+            else if(req.body.password !== req.body.passwordConfirm){
                 reject('Confirme a senha corretamente!');
             }
             else{
@@ -179,8 +179,8 @@ module.exports = {
                     SET SENHA_USUARIO = ?
                     WHERE ID_USUARIO = ?
                 `, [
-                    req.fields.password,
-                    req.fields.id
+                    req.body.password,
+                    req.body.id
                 ], (err, results)=>{
 
                     if(err){
