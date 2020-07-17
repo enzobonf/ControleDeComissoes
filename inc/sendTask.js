@@ -36,7 +36,7 @@ function getSituation(situation, receivementDate){
 function getTr(results){
     
     let somaComissoes = 0;
-    let height = results.length * 25 + 1;
+    let height = results.length * 21 + 41;
     let tr = `<html>
                 <body style="width: 428px; height: ${height}px;">
                     <p>
