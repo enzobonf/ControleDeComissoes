@@ -112,7 +112,7 @@ module.exports = {
 
             var $ = cheerio.load(file);
 
-            let pedidos = []
+            let pedidos = [];
             
             let tablePedidos = $('#mainContent > div:nth-child(3) > div:nth-child(3) > div.box-content.table-content > table > tbody > tr');
 

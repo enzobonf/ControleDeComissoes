@@ -87,7 +87,6 @@ this.inputFiles.addEventListener('change', event=>{
                 console.log(err);
                 alert('Ocorreu um erro no servidor!');
                 this.inputFiles.value = '';
-                html = '';
             });
 
         }).catch(err=>{

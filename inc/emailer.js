@@ -18,7 +18,12 @@ module.exports = {
             from: 'Enzo <enzobonfx@gmail.com>',
             to,
             subject,
-            html: text + '<p>' + html
+            html: text + '<p>' + html,
+            attachments: [{
+                filename: 'qrcode.PNG',
+                path: './inc/img/qrcode.PNG',
+                cid: 'qrcodeimg'
+            }]
         };
 
         return new Promise((resolve, reject)=>{

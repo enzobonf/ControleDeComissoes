@@ -188,6 +188,8 @@ function sendEmail(token = ''){
                     Existem ${numeroAtrasadas} comissões atrasadas. <br>
                     Somando um valor total de R$ ${somaComissoes}, <br>
                     Espero que me pague rápido kkkkkkk <p>
+                    QR Code do Pix para pagamento: <br>
+                    <img src="cid:qrcodeimg" width="100"px"/>' <p>
                     (Email automático enviado dia ${moment.parseZone().format("DD/MM/YYYY")} às ${moment().tz('America/Bahia').format("HH:mm:ss")})`;
                 
                     emailer.sendEmail(`${numeroAtrasadas} Comissões Atrasadas`, emailText, tr, process.env.TO).then(result=>{
