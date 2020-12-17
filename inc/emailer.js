@@ -4,7 +4,7 @@ require('dotenv').config();
 
 module.exports = {
 
-    sendEmail(subject, text, html, to){
+    sendEmail(subject, text, html, to, attachments = []){
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -19,11 +19,7 @@ module.exports = {
             to,
             subject,
             html: text + '<p>' + html,
-            attachments: [{
-                filename: 'qrcode.PNG',
-                path: './inc/img/qrcode.PNG',
-                cid: 'qrcodeimg'
-            }]
+            attachments
         };
 
         return new Promise((resolve, reject)=>{
