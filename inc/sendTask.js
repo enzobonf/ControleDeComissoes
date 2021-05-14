@@ -121,7 +121,7 @@ function sendEmail(token = ''){
                 let sufixo = numeroAtrasadas > 1 ? 'ões' : 'ão';
                 let sufixoS = numeroAtrasadas > 1 ? 's' : '';
 
-                let pix = await getQrCode(arrayTr.somaComissoes, `Comiss${sufixo.replace('õ', 'o')} do${sufixoS} pedido${sufixoS} ${strPedidos}`);
+                let pix = await getQrCode(arrayTr.somaComissoes, `Comiss${sufixo.replace('õ', 'o').replace("ã", "a")} do${sufixoS} pedido${sufixoS} ${strPedidos}`);
 
                 emailText = `Oi mãe, <br>
                 ${numeroAtrasadas > 1 ? 'Existem' : 'Há'} ${numeroAtrasadas} comiss${sufixo} atrasada${sufixoS}. <br>

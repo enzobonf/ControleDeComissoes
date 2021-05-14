@@ -35,7 +35,7 @@ module.exports = {
                 text: 'Tela Inicial',
                 href: '/',
                 icon: 'home',
-                active: false
+                active: false,
             },
             {
                 text: 'Comissões',

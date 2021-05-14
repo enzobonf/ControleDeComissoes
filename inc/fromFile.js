@@ -142,15 +142,6 @@ module.exports = {
           catch(err){
             reject(err)
           }
-          finally{
-
-            /* fs.unlink(filename, (err) => {
-              if(err){
-                console.error(err);
-              }
-            }); */
-
-          }
 
         });
 
